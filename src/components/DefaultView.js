@@ -1,31 +1,43 @@
 import React, { Component } from 'react';
-import { Menu, Button, Feed, Icon } from 'semantic-ui-react';
+import { Menu, Button, Feed, Icon, Grid } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { fetchPosts } from '../actions';
+import moment from 'moment';
+import { fetchPosts, sortByDate, sortByPopularity } from '../actions';
 
 class DefaultView extends Component {
   state = {
-    activeItem: 'category1'
+    activeCategory: 'All',
+    activeSort: 'closest'
   };
 
   componentDidMount() {
     this.props.fetchPosts();
   }
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+  handleCategoryClick = (e, { name }) =>
+    this.setState({ activeCategory: name });
+
+  handleSortClick = (e, { name }) => {
+    this.setState({ activeSort: name });
+    if (name === 'MostRecent') {
+      this.props.sortByDate(this.props.posts);
+    } else {
+      this.props.sortByPopularity(this.props.posts);
+    }
+  };
 
   renderPosts = () => {
     if (!_.isEmpty(this.props.posts)) {
       return _.map(this.props.posts, post =>
-        <Feed.Event>
+        <Feed.Event key={post.id}>
           <Feed.Label>
-            <Icon name="pencil" />
+            <Icon bordered name="user" />
           </Feed.Label>
           <Feed.Content>
             <Feed.Summary>
-              <a>{post.author}</a> {post.title}
-              <Feed.Date>{post.timestamp}</Feed.Date>
+              <Feed.User>{post.author}</Feed.User> in <a>{post.category}</a>
+              <Feed.Date>{moment(post.timestamp).fromNow()}</Feed.Date>
             </Feed.Summary>
             <Feed.Extra text>
               {post.body}
@@ -42,8 +54,21 @@ class DefaultView extends Component {
     }
   };
 
+  renderCategories = activeCategory => {
+    if (!_.isEmpty(this.props.posts)) {
+      return _.map(_.sortBy(this.props.posts, 'category'), post =>
+        <Menu.Item
+          name={post.category}
+          active={activeCategory === post.category}
+          onClick={this.handleCategoryClick}
+          key={post.category}
+        />
+      );
+    }
+  };
+
   render() {
-    const { activeItem } = this.state;
+    const { activeCategory, activeSort } = this.state;
     const { posts } = this.props;
 
     if (!posts) {
@@ -55,20 +80,11 @@ class DefaultView extends Component {
         <Menu tabular inverted>
           <Menu.Item header>Readable</Menu.Item>
           <Menu.Item
-            name="category1"
-            active={activeItem === 'category1'}
-            onClick={this.handleItemClick}
+            name="All"
+            active={activeCategory === 'All'}
+            onClick={this.handleCategoryClick}
           />
-          <Menu.Item
-            name="category2"
-            active={activeItem === 'category2'}
-            onClick={this.handleItemClick}
-          />
-          <Menu.Item
-            name="category3"
-            active={activeItem === 'category3'}
-            onClick={this.handleItemClick}
-          />
+          {this.renderCategories(activeCategory)}
           <Menu.Menu position="right">
             <Menu.Item>
               <Button primary floated="right">
@@ -78,9 +94,29 @@ class DefaultView extends Component {
           </Menu.Menu>
         </Menu>
 
-        <Feed>
-          {this.renderPosts()}
-        </Feed>
+        <Grid>
+          <Grid.Column stretched width={12}>
+            <Feed>
+              {this.renderPosts()}
+            </Feed>
+          </Grid.Column>
+
+          <Grid.Column width={4}>
+            <Menu text vertical>
+              <Menu.Item header>Sort By</Menu.Item>
+              <Menu.Item
+                name="MostRecent"
+                active={activeSort === 'mostRecent'}
+                onClick={this.handleSortClick}
+              />
+              <Menu.Item
+                name="mostPopular"
+                active={activeSort === 'mostPopular'}
+                onClick={this.handleSortClick}
+              />
+            </Menu>
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }
@@ -94,9 +130,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchPosts: () => {
-      dispatch(fetchPosts());
-    }
+    fetchPosts: () => dispatch(fetchPosts()),
+    sortByDate: posts => dispatch(sortByDate(posts)),
+    sortByPopularity: posts => dispatch(sortByPopularity(posts))
   };
 };
 

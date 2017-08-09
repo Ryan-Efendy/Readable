@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import promise from 'redux-promise';
+import logger from 'redux-logger';
 import reducers from './reducers';
 
 import { Route } from 'react-router-dom';
@@ -13,7 +14,7 @@ import DefaultView from './components/DefaultView';
 import CreateEditView from './components/CreateEditView';
 import CategoryView from './components/CategoryView';
 
-const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
+const createStoreWithMiddleware = applyMiddleware(promise, logger)(createStore);
 
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
