@@ -20,7 +20,7 @@ ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <BrowserRouter>
       <div>
-        <Route path="/" component={DefaultView} />
+        <Route exact path="/" component={DefaultView} />
         <Route exact path="/create" component={CreateEditView} />
         <Route exac3t path="/show" component={CategoryView} />
       </div>

@@ -1,17 +1,43 @@
 import { combineReducers } from 'redux';
 import _ from 'lodash';
-// import { reducer as formReducer } from 'redux-form';
-import { FETCH_POSTS, SORT_BY_DATE, SORT_BY_POPULARITY } from '../actions';
+import { reducer as formReducer } from 'redux-form';
+import {
+  FETCH_POSTS,
+  SORT_BY_DATE,
+  SORT_BY_POPULARITY,
+  INCREMENT_LIKES,
+  DECREMENT_LIKES
+} from '../actions';
 
 function postsReducer(state = {}, action) {
+  let tmpState;
   switch (action.type) {
     case FETCH_POSTS:
-      // return _.mapKeys(action.payload.data, 'id');
-      return action.payload.data;
+      // convert array of objects -> object of objects, key as id
+      return _.mapKeys(action.payload.data, 'id');
     case SORT_BY_DATE:
-      return _.reverse(_.sortBy(action.payload, 'timestamp'));
+      return _.reverse(_.sortBy(action.posts, 'timestamp'));
     case SORT_BY_POPULARITY:
-      return _.reverse(_.sortBy(action.payload, 'voteScore'));
+      return _.reverse(_.sortBy(action.posts, 'voteScore'));
+    case INCREMENT_LIKES:
+      //todo: see if there's a better way to do this...
+      tmpState = _.mapKeys(state, 'id');
+      return {
+        ...tmpState,
+        [action.id]: {
+          ...tmpState[action.id],
+          voteScore: tmpState[action.id].voteScore + 1
+        }
+      };
+    case DECREMENT_LIKES:
+      tmpState = _.mapKeys(state, 'id');
+      return {
+        ...tmpState,
+        [action.id]: {
+          ...tmpState[action.id],
+          voteScore: tmpState[action.id].voteScore - 1
+        }
+      };
     default:
       return state;
   }
@@ -20,9 +46,8 @@ function postsReducer(state = {}, action) {
 function categoriesReducer(state = {}, action) {
   switch (action.type) {
     case FETCH_POSTS:
-      return _.sortBy(action.payload.data, 'category').map(
-        post => post.category
-      );
+      let categories = new Set(action.payload.data.map(post => post.category));
+      return _.sortBy([...categories]);
     default:
       return state;
   }
@@ -30,7 +55,8 @@ function categoriesReducer(state = {}, action) {
 
 const rootReducer = combineReducers({
   posts: postsReducer,
-  categories: categoriesReducer
+  categories: categoriesReducer,
+  form: formReducer
 });
 
 export default rootReducer;

@@ -3,17 +3,25 @@ import { Menu, Button, Feed, Icon, Grid } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import moment from 'moment';
-import { fetchPosts, sortByDate, sortByPopularity } from '../actions';
+import { Link } from 'react-router-dom';
+import {
+  fetchPosts,
+  sortByDate,
+  sortByPopularity,
+  incrementLikes,
+  decrementLikes
+} from '../actions';
 
 class DefaultView extends Component {
   constructor(props) {
     super(props);
     this.state = {
       activeCategory: 'All',
-      activeSort: 'closest'
+      activeSort: 'mostPopular'
     };
     this.handleCategoryClick = this.handleCategoryClick.bind(this);
     this.handleSortClick = this.handleSortClick.bind(this);
+    this.sortBy = this.sortBy.bind(this);
   }
 
   componentDidMount() {
@@ -26,18 +34,29 @@ class DefaultView extends Component {
 
   handleSortClick = (e, { name }) => {
     this.setState({ activeSort: name });
-    name === 'MostRecent'
-      ? this.props.sortByDate(this.props.posts)
-      : this.props.sortByPopularity(this.props.posts);
+    //todo: which method if better/more efficient
+    // name === 'mostPopular'
+    //   ? this.props.sortByPopularity(this.props.posts)
+    //   : this.props.sortByDate(this.props.posts);
+    name === 'mostPopular'
+      ? _.reverse(_.sortBy(this.props.post, 'voteScore'))
+      : _.reverse(_.sortBy(this.props.post, 'timestamp'));
+  };
+
+  sortBy = posts => {
+    return this.state.activeSort === 'mostPopular'
+      ? _.reverse(_.sortBy(posts, 'voteScore'))
+      : _.reverse(_.sortBy(posts, 'timestamp'));
   };
 
   renderPosts = category => {
     if (!_.isEmpty(this.props.posts)) {
-      debugger;
       let posts =
         category !== 'All'
-          ? _.filter(this.props.posts, post => post.category === category)
-          : this.props.posts;
+          ? this.sortBy(
+              _.filter(this.props.posts, post => post.category === category)
+            )
+          : this.sortBy(this.props.posts);
       return _.map(posts, post =>
         <Feed.Event key={post.id}>
           <Feed.Label>
@@ -52,8 +71,17 @@ class DefaultView extends Component {
               {post.body}
             </Feed.Extra>
             <Feed.Meta>
+              <Feed.Like
+                onClick={this.props.incrementLikes.bind(null, post.id)}
+              >
+                <Icon name="thumbs up" />
+              </Feed.Like>
+              <Feed.Like
+                onClick={this.props.decrementLikes.bind(null, post.id)}
+              >
+                <Icon name="thumbs down" />
+              </Feed.Like>
               <Feed.Like>
-                <Icon name="like" />
                 {post.voteScore}
               </Feed.Like>
             </Feed.Meta>
@@ -64,7 +92,7 @@ class DefaultView extends Component {
   };
 
   renderCategories = activeCategory => {
-    if (!_.isEmpty(this.props.posts)) {
+    if (!_.isEmpty(this.props.categories)) {
       return this.props.categories.map(category =>
         <Menu.Item
           name={category}
@@ -96,9 +124,11 @@ class DefaultView extends Component {
           {this.renderCategories(activeCategory)}
           <Menu.Menu position="right">
             <Menu.Item>
-              <Button primary floated="right">
-                Create Post
-              </Button>
+              <Link to="/create">
+                <Button primary floated="right">
+                  Create Post
+                </Button>
+              </Link>
             </Menu.Item>
           </Menu.Menu>
         </Menu>
@@ -114,13 +144,13 @@ class DefaultView extends Component {
             <Menu text vertical>
               <Menu.Item header>Sort By</Menu.Item>
               <Menu.Item
-                name="MostRecent"
-                active={activeSort === 'mostRecent'}
+                name="mostPopular"
+                active={activeSort === 'mostPopular'}
                 onClick={this.handleSortClick}
               />
               <Menu.Item
-                name="mostPopular"
-                active={activeSort === 'mostPopular'}
+                name="MostRecent"
+                active={activeSort === 'mostRecent'}
                 onClick={this.handleSortClick}
               />
             </Menu>
@@ -142,7 +172,9 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchPosts: () => dispatch(fetchPosts()),
     sortByDate: posts => dispatch(sortByDate(posts)),
-    sortByPopularity: posts => dispatch(sortByPopularity(posts))
+    sortByPopularity: posts => dispatch(sortByPopularity(posts)),
+    incrementLikes: id => dispatch(incrementLikes(id)),
+    decrementLikes: id => dispatch(decrementLikes(id))
   };
 };
 
