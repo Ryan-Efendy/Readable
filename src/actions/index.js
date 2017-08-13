@@ -20,13 +20,13 @@ export const fetchPosts = () => {
 export const sortByDate = posts => {
   return {
     type: SORT_BY_DATE,
-    payload: posts
+    posts
   };
 };
 
 export const sortByPopularity = posts => {
   return {
     type: SORT_BY_POPULARITY,
-    payload: posts
+    posts
   };
 };

@@ -17,8 +17,20 @@ function postsReducer(state = {}, action) {
   }
 }
 
+function categoriesReducer(state = {}, action) {
+  switch (action.type) {
+    case FETCH_POSTS:
+      return _.sortBy(action.payload.data, 'category').map(
+        post => post.category
+      );
+    default:
+      return state;
+  }
+}
+
 const rootReducer = combineReducers({
-  posts: postsReducer
+  posts: postsReducer,
+  categories: categoriesReducer
 });
 
 export default rootReducer;

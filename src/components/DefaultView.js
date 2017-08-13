@@ -6,30 +6,39 @@ import moment from 'moment';
 import { fetchPosts, sortByDate, sortByPopularity } from '../actions';
 
 class DefaultView extends Component {
-  state = {
-    activeCategory: 'All',
-    activeSort: 'closest'
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeCategory: 'All',
+      activeSort: 'closest'
+    };
+    this.handleCategoryClick = this.handleCategoryClick.bind(this);
+    this.handleSortClick = this.handleSortClick.bind(this);
+  }
 
   componentDidMount() {
     this.props.fetchPosts();
   }
 
-  handleCategoryClick = (e, { name }) =>
+  handleCategoryClick = (e, { name }) => {
     this.setState({ activeCategory: name });
+  };
 
   handleSortClick = (e, { name }) => {
     this.setState({ activeSort: name });
-    if (name === 'MostRecent') {
-      this.props.sortByDate(this.props.posts);
-    } else {
-      this.props.sortByPopularity(this.props.posts);
-    }
+    name === 'MostRecent'
+      ? this.props.sortByDate(this.props.posts)
+      : this.props.sortByPopularity(this.props.posts);
   };
 
-  renderPosts = () => {
+  renderPosts = category => {
     if (!_.isEmpty(this.props.posts)) {
-      return _.map(this.props.posts, post =>
+      debugger;
+      let posts =
+        category !== 'All'
+          ? _.filter(this.props.posts, post => post.category === category)
+          : this.props.posts;
+      return _.map(posts, post =>
         <Feed.Event key={post.id}>
           <Feed.Label>
             <Icon bordered name="user" />
@@ -56,12 +65,12 @@ class DefaultView extends Component {
 
   renderCategories = activeCategory => {
     if (!_.isEmpty(this.props.posts)) {
-      return _.map(_.sortBy(this.props.posts, 'category'), post =>
+      return this.props.categories.map(category =>
         <Menu.Item
-          name={post.category}
-          active={activeCategory === post.category}
+          name={category}
+          active={activeCategory === category}
           onClick={this.handleCategoryClick}
-          key={post.category}
+          key={category}
         />
       );
     }
@@ -94,10 +103,10 @@ class DefaultView extends Component {
           </Menu.Menu>
         </Menu>
 
-        <Grid>
+        <Grid className="very padded">
           <Grid.Column stretched width={12}>
             <Feed>
-              {this.renderPosts()}
+              {this.renderPosts(this.state.activeCategory)}
             </Feed>
           </Grid.Column>
 
@@ -122,9 +131,10 @@ class DefaultView extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ posts, categories }) => {
   return {
-    posts: state.posts
+    posts,
+    categories
   };
 };
 
