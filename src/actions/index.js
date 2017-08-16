@@ -1,20 +1,33 @@
 import axios from 'axios';
 
 export const FETCH_POSTS = 'fetch_posts';
+export const FETCH_CATEGORIES = 'fetch_categories';
 export const SORT_BY_DATE = 'sort_by_date';
 export const SORT_BY_POPULARITY = 'sort_by_popularity';
 export const INCREMENT_LIKES = 'increment_likes';
 export const DECREMENT_LIKES = 'decrement_likes';
+export const CREATE_POST = 'create_post';
 
-const URL = 'http://localhost:5001/posts';
+const URL = 'http://localhost:5001/';
 
 export const fetchPosts = () => {
-  const request = axios.get(URL, {
+  const request = axios.get(`${URL}posts`, {
     headers: { Authorization: 'whatever-you-want' }
   });
 
   return {
     type: FETCH_POSTS,
+    payload: request
+  };
+};
+
+export const fetchCategories = () => {
+  const request = axios.get(`${URL}categories`, {
+    headers: { Authorization: 'whatever-you-want' }
+  });
+
+  return {
+    type: FETCH_CATEGORIES,
     payload: request
   };
 };
@@ -44,5 +57,19 @@ export const decrementLikes = id => {
   return {
     type: DECREMENT_LIKES,
     id
+  };
+};
+
+export const createPost = (values, callback) => {
+  const request = axios({
+    method: 'post',
+    url: `${URL}posts`,
+    data: values,
+    headers: { Authorization: 'whatever-you-want' }
+  }).then(() => callback());
+  debugger;
+  return {
+    type: CREATE_POST,
+    request
   };
 };

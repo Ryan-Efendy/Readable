@@ -133,7 +133,7 @@ class DefaultView extends Component {
           </Menu.Menu>
         </Menu>
 
-        <Grid className="very padded">
+        <Grid>
           <Grid.Column stretched width={12}>
             <Feed>
               {this.renderPosts(this.state.activeCategory)}

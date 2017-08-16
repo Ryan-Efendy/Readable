@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { reducer as formReducer } from 'redux-form';
 import {
   FETCH_POSTS,
+  FETCH_CATEGORIES,
   SORT_BY_DATE,
   SORT_BY_POPULARITY,
   INCREMENT_LIKES,
@@ -45,9 +46,8 @@ function postsReducer(state = {}, action) {
 
 function categoriesReducer(state = {}, action) {
   switch (action.type) {
-    case FETCH_POSTS:
-      let categories = new Set(action.payload.data.map(post => post.category));
-      return _.sortBy([...categories]);
+    case FETCH_CATEGORIES:
+      return action.payload.data['categories'].map(category => category.name);
     default:
       return state;
   }
