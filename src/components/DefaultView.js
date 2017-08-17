@@ -9,7 +9,8 @@ import {
   sortByDate,
   sortByPopularity,
   incrementLikes,
-  decrementLikes
+  decrementLikes,
+  fetchCategories
 } from '../actions';
 
 class DefaultView extends Component {
@@ -26,6 +27,7 @@ class DefaultView extends Component {
 
   componentDidMount() {
     this.props.fetchPosts();
+    this.props.fetchCategories();
   }
 
   handleCategoryClick = (e, { name }) => {
@@ -49,6 +51,7 @@ class DefaultView extends Component {
       : _.reverse(_.sortBy(posts, 'timestamp'));
   };
 
+  //todo: add user profile?
   renderPosts = category => {
     if (!_.isEmpty(this.props.posts)) {
       let posts =
@@ -59,8 +62,8 @@ class DefaultView extends Component {
           : this.sortBy(this.props.posts);
       return _.map(posts, post =>
         <Feed.Event key={post.id}>
-          <Feed.Label>
-            <Icon bordered name="user" />
+          <Feed.Label style={{ width: '7.5em' }}>
+            <img src="https://source.unsplash.com/random/73x73" alt="" />
           </Feed.Label>
           <Feed.Content>
             <Feed.Summary>
@@ -84,6 +87,26 @@ class DefaultView extends Component {
               <Feed.Like>
                 {post.voteScore}
               </Feed.Like>
+              <Link to="/create">
+                <Button
+                  secondary
+                  floated="right"
+                  size="mini"
+                  content="Details"
+                  icon="comments"
+                  style={{ marginLeft: '1em' }}
+                />
+              </Link>
+              <Link to="/create">
+                <Button
+                  primary
+                  floated="right"
+                  size="mini"
+                  content="Edit"
+                  icon="write"
+                  style={{ marginLeft: '10em' }}
+                />
+              </Link>
             </Feed.Meta>
           </Feed.Content>
         </Feed.Event>
@@ -91,6 +114,7 @@ class DefaultView extends Component {
     }
   };
 
+  //todo: should i cache categories since is also used in CreateEditView
   renderCategories = activeCategory => {
     if (!_.isEmpty(this.props.categories)) {
       return this.props.categories.map(category =>
@@ -133,7 +157,7 @@ class DefaultView extends Component {
           </Menu.Menu>
         </Menu>
 
-        <Grid>
+        <Grid className="very padded">
           <Grid.Column stretched width={12}>
             <Feed>
               {this.renderPosts(this.state.activeCategory)}
@@ -171,6 +195,7 @@ const mapStateToProps = ({ posts, categories }) => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchPosts: () => dispatch(fetchPosts()),
+    fetchCategories: () => dispatch(fetchCategories()),
     sortByDate: posts => dispatch(sortByDate(posts)),
     sortByPopularity: posts => dispatch(sortByPopularity(posts)),
     incrementLikes: id => dispatch(incrementLikes(id)),

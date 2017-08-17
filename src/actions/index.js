@@ -7,6 +7,8 @@ export const SORT_BY_POPULARITY = 'sort_by_popularity';
 export const INCREMENT_LIKES = 'increment_likes';
 export const DECREMENT_LIKES = 'decrement_likes';
 export const CREATE_POST = 'create_post';
+export const FETCH_POST = 'fetch_post';
+export const LOAD = 'load';
 
 const URL = 'http://localhost:5001/';
 
@@ -67,9 +69,20 @@ export const createPost = (values, callback) => {
     data: values,
     headers: { Authorization: 'whatever-you-want' }
   }).then(() => callback());
-  debugger;
   return {
     type: CREATE_POST,
     request
   };
 };
+
+export const fetchPost = id => {
+  const request = axios.get(`${URL}posts/${id}`, {
+    headers: { Authorization: 'whatever-you-want' }
+  });
+  return {
+    type: FETCH_POST,
+    payload: request
+  };
+};
+
+export const load = data => ({ type: LOAD, data });

@@ -7,7 +7,10 @@ import {
   SORT_BY_DATE,
   SORT_BY_POPULARITY,
   INCREMENT_LIKES,
-  DECREMENT_LIKES
+  DECREMENT_LIKES,
+  CREATE_POST,
+  FETCH_POST,
+  LOAD
 } from '../actions';
 
 function postsReducer(state = {}, action) {
@@ -38,6 +41,14 @@ function postsReducer(state = {}, action) {
           ...tmpState[action.id],
           voteScore: tmpState[action.id].voteScore - 1
         }
+      };
+    case CREATE_POST:
+      return _.reverse(_.sortBy(action.posts, 'voteScore'));
+    case FETCH_POST:
+      return { ...state, [action.payload.data.id]: action.payload.data };
+    case LOAD:
+      return {
+        data: action.data
       };
     default:
       return state;
