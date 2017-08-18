@@ -71,7 +71,7 @@ class DefaultView extends Component {
               <Feed.Date>{moment(post.timestamp).fromNow()}</Feed.Date>
             </Feed.Summary>
             <Feed.Extra text>
-              {post.body}
+              {post.title}
             </Feed.Extra>
             <Feed.Meta>
               <Feed.Like

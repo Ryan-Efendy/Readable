@@ -9,6 +9,7 @@ export const DECREMENT_LIKES = 'decrement_likes';
 export const CREATE_POST = 'create_post';
 export const FETCH_POST = 'fetch_post';
 export const LOAD = 'load';
+export const UPDATE_POST = 'update_post';
 
 const URL = 'http://localhost:5001/';
 
@@ -85,4 +86,22 @@ export const fetchPost = id => {
   };
 };
 
-export const load = data => ({ type: LOAD, data });
+export const updatePost = (id, values, callback) => {
+  const request = axios({
+    method: 'put',
+    url: `${URL}posts/${id}`,
+    data: values,
+    headers: { Authorization: 'whatever-you-want' }
+  }).then(() => callback());
+  return {
+    type: UPDATE_POST,
+    request
+  };
+};
+
+export const load = data => {
+  return {
+    type: LOAD,
+    data
+  };
+};
