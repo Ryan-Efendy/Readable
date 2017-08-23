@@ -10,6 +10,7 @@ export const CREATE_POST = 'create_post';
 export const FETCH_POST = 'fetch_post';
 export const LOAD = 'load';
 export const UPDATE_POST = 'update_post';
+export const FETCH_COMMENT = 'fetch_comment';
 
 const URL = 'http://localhost:5001/';
 
@@ -103,5 +104,15 @@ export const load = data => {
   return {
     type: LOAD,
     data
+  };
+};
+
+export const fetchComment = id => {
+  const request = axios.get(`${URL}posts/${id}/comments`, {
+    headers: { Authorization: 'whatever-you-want' }
+  });
+  return {
+    type: FETCH_COMMENT,
+    payload: request
   };
 };

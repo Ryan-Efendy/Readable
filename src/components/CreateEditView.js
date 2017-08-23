@@ -17,10 +17,13 @@ class createEditForm extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchCategories();
-    if (this.props.match.params.id) {
-      this.setState({ isEditView: true });
-      this.props.fetchPost(this.props.match.params.id);
+    // cache: don't eagerly refresh posts check if already fetch posts
+    if (!this.props.post) {
+      this.props.fetchCategories();
+      if (this.props.match.params.id) {
+        this.setState({ isEditView: true });
+        this.props.fetchPost(this.props.match.params.id);
+      }
     }
   }
 

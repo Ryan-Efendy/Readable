@@ -13,6 +13,7 @@ import { Route } from 'react-router-dom';
 import DefaultView from './components/DefaultView';
 import CreateEditView from './components/CreateEditView';
 import CategoryView from './components/CategoryView';
+import PostDetailView from './components/PostDetailView';
 import InitializeFromStateForm from './components/initializeFromStateForm';
 
 const createStoreWithMiddleware = applyMiddleware(promise, logger)(createStore);
@@ -28,10 +29,10 @@ ReactDOM.render(
     <BrowserRouter>
       <div>
         <Route exact path="/" component={DefaultView} />
-        <Route exact path="/test" component={InitializeFromStateForm} />
-        <Route exact path="/create" component={CreateEditView} />
-        <Route exact path="/edit/:id" component={CreateEditView} />
-        <Route exac3t path="/show" component={CategoryView} />
+        <Route path="/test" component={InitializeFromStateForm} />
+        <Route path="/create" component={CreateEditView} />
+        <Route path="/edit/:id" component={CreateEditView} />
+        <Route path="/show/:id" component={PostDetailView} />
       </div>
     </BrowserRouter>
   </Provider>,

@@ -87,7 +87,7 @@ class DefaultView extends Component {
               <Feed.Like>
                 {post.voteScore}
               </Feed.Like>
-              <Link to="/create">
+              <Link to={`/show/${post.id}`}>
                 <Button
                   secondary
                   floated="right"
@@ -97,7 +97,7 @@ class DefaultView extends Component {
                   style={{ marginLeft: '1em' }}
                 />
               </Link>
-              <Link to="/create">
+              <Link to={`/edit/${post.id}`}>
                 <Button
                   primary
                   floated="right"

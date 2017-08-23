@@ -10,7 +10,8 @@ import {
   DECREMENT_LIKES,
   CREATE_POST,
   FETCH_POST,
-  LOAD
+  LOAD,
+  FETCH_COMMENT
 } from '../actions';
 
 function postsReducer(state = {}, action) {
@@ -47,8 +48,14 @@ function postsReducer(state = {}, action) {
     case FETCH_POST:
       return { ...state, [action.payload.data.id]: action.payload.data };
     case LOAD:
+      return { data: action.data };
+    case FETCH_COMMENT:
       return {
-        data: action.data
+        ...state,
+        [action.payload.data[0].parentId]: {
+          ...state[action.payload.data[0].parentId],
+          comments: action.payload.data
+        }
       };
     default:
       return state;
@@ -63,6 +70,15 @@ function categoriesReducer(state = {}, action) {
       return state;
   }
 }
+
+// function commentsReducer(state = {}, action) {
+//   switch (action.type) {
+//     case FETCH_COMMENT:
+//       return action.payload.data['categories'].map(category => category.name);
+//     default:
+//       return state;
+//   }
+// }
 
 const rootReducer = combineReducers({
   posts: postsReducer,
