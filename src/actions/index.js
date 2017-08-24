@@ -11,6 +11,8 @@ export const FETCH_POST = 'fetch_post';
 export const LOAD = 'load';
 export const UPDATE_POST = 'update_post';
 export const FETCH_COMMENT = 'fetch_comment';
+export const DELETE_POST = 'delete_post';
+export const CREATE_COMMENT = 'create_comment';
 
 const URL = 'http://localhost:5001/';
 
@@ -114,5 +116,30 @@ export const fetchComment = id => {
   return {
     type: FETCH_COMMENT,
     payload: request
+  };
+};
+
+export const deletePost = (id, callback) => {
+  const request = axios
+    .delete(`${URL}posts/${id}`, {
+      headers: { Authorization: 'whatever-you-want' }
+    })
+    .then(() => callback());
+  return {
+    type: DELETE_POST,
+    payload: id
+  };
+};
+
+export const createComment = values => {
+  const request = axios({
+    method: 'post',
+    url: `${URL}comments`,
+    data: values,
+    headers: { Authorization: 'whatever-you-want' }
+  });
+  return {
+    type: CREATE_COMMENT,
+    request
   };
 };

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Button, Form, Container, Header } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import uuidv1 from 'uuid/v1';
 import _ from 'lodash';
@@ -95,7 +95,7 @@ class createEditForm extends Component {
   };
 
   render() {
-    const { handleSubmit, categories } = this.props;
+    const { handleSubmit, categories, history } = this.props;
     const { isEditView } = this.state;
     //todo: is there a better/cleaner way to do this
     if (_.isEmpty(categories)) {
@@ -144,9 +144,7 @@ class createEditForm extends Component {
               <Button type="submit">
                 {isEditView ? `Update` : `Submit`}
               </Button>
-              <Link to="/">
-                <Button>Cancel</Button>
-              </Link>
+              <Button onClick={() => history.goBack()}>Cancel</Button>
             </div>
           </Form>
         </Container>

@@ -60,57 +60,61 @@ class DefaultView extends Component {
               _.filter(this.props.posts, post => post.category === category)
             )
           : this.sortBy(this.props.posts);
-      return _.map(posts, post =>
-        <Feed.Event key={post.id}>
-          <Feed.Label style={{ width: '7.5em' }}>
-            <img src="https://source.unsplash.com/random/73x73" alt="" />
-          </Feed.Label>
-          <Feed.Content>
-            <Feed.Summary>
-              <Feed.User>{post.author}</Feed.User> in <a>{post.category}</a>
-              <Feed.Date>{moment(post.timestamp).fromNow()}</Feed.Date>
-            </Feed.Summary>
-            <Feed.Extra text>
-              {post.title}
-            </Feed.Extra>
-            <Feed.Meta>
-              <Feed.Like
-                onClick={this.props.incrementLikes.bind(null, post.id)}
-              >
-                <Icon name="thumbs up" />
-              </Feed.Like>
-              <Feed.Like
-                onClick={this.props.decrementLikes.bind(null, post.id)}
-              >
-                <Icon name="thumbs down" />
-              </Feed.Like>
-              <Feed.Like>
-                {post.voteScore}
-              </Feed.Like>
-              <Link to={`/show/${post.id}`}>
-                <Button
-                  secondary
-                  floated="right"
-                  size="mini"
-                  content="Details"
-                  icon="comments"
-                  style={{ marginLeft: '1em' }}
-                />
-              </Link>
-              <Link to={`/edit/${post.id}`}>
-                <Button
-                  primary
-                  floated="right"
-                  size="mini"
-                  content="Edit"
-                  icon="write"
-                  style={{ marginLeft: '10em' }}
-                />
-              </Link>
-            </Feed.Meta>
-          </Feed.Content>
-        </Feed.Event>
-      );
+      return _.map(posts, post => {
+        if (!post.deleted) {
+          return (
+            <Feed.Event key={post.id}>
+              <Feed.Label style={{ width: '7.5em' }}>
+                <img src="https://source.unsplash.com/random/73x73" alt="" />
+              </Feed.Label>
+              <Feed.Content>
+                <Feed.Summary>
+                  <Feed.User>{post.author}</Feed.User> in <a>{post.category}</a>
+                  <Feed.Date>{moment(post.timestamp).fromNow()}</Feed.Date>
+                </Feed.Summary>
+                <Feed.Extra text>
+                  {post.title}
+                </Feed.Extra>
+                <Feed.Meta>
+                  <Feed.Like
+                    onClick={this.props.incrementLikes.bind(null, post.id)}
+                  >
+                    <Icon name="thumbs up" />
+                  </Feed.Like>
+                  <Feed.Like
+                    onClick={this.props.decrementLikes.bind(null, post.id)}
+                  >
+                    <Icon name="thumbs down" />
+                  </Feed.Like>
+                  <Feed.Like>
+                    {post.voteScore}
+                  </Feed.Like>
+                  <Link to={`/show/${post.id}`}>
+                    <Button
+                      secondary
+                      floated="right"
+                      size="mini"
+                      content="Details"
+                      icon="comments"
+                      style={{ marginLeft: '1em' }}
+                    />
+                  </Link>
+                  <Link to={`/edit/${post.id}`}>
+                    <Button
+                      primary
+                      floated="right"
+                      size="mini"
+                      content="Edit"
+                      icon="write"
+                      style={{ marginLeft: '10em' }}
+                    />
+                  </Link>
+                </Feed.Meta>
+              </Feed.Content>
+            </Feed.Event>
+          );
+        }
+      });
     }
   };
 

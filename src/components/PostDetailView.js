@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Item, Container, Header, Icon } from 'semantic-ui-react';
+import { Item, Container, Header, Icon, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { fetchPost } from '../actions';
-import Comment from './Comment';
+import { Link } from 'react-router-dom';
+import { fetchPost, deletePost } from '../actions';
+import Comments from './Comments';
 
 class PostDetailView extends Component {
   componentDidMount() {
@@ -15,6 +16,12 @@ class PostDetailView extends Component {
       }
     }
   }
+
+  onDeleteHandle = () => {
+    const { id } = this.props.match.params;
+    const { deletePost, history } = this.props;
+    deletePost(id, () => history.push('/'));
+  };
 
   render() {
     const { post } = this.props;
@@ -52,7 +59,24 @@ class PostDetailView extends Component {
                 <Icon name="like" />
                 {post.voteScore}
               </Item.Extra>
-              <Comment id={post.id} />
+              <Item.Extra>
+                <Link to={`/edit/${post.id}`}>
+                  <Button
+                    positive
+                    content="Edit"
+                    icon="edit"
+                    labelPosition="left"
+                  />
+                </Link>
+                <Button
+                  negative
+                  content="Delete"
+                  icon="delete"
+                  labelPosition="left"
+                  onClick={this.onDeleteHandle.bind(this)}
+                />
+              </Item.Extra>
+              <Comments id={post.id} />
             </Item.Content>
           </Item>
         </Item.Group>
@@ -67,4 +91,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps, { fetchPost })(PostDetailView);
+export default connect(mapStateToProps, { fetchPost, deletePost })(
+  PostDetailView
+);
