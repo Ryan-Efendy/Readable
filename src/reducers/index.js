@@ -12,11 +12,13 @@ import {
   FETCH_POST,
   LOAD,
   FETCH_COMMENT,
-  CREATE_COMMENT
+  CREATE_COMMENT,
+  INCREMENT_COMMENT_LIKES,
+  DECREMENT_COMMENT_LIKES
 } from '../actions';
 
 function postsReducer(state = {}, action) {
-  let tmpState;
+  let tmpState, tmpComment;
   switch (action.type) {
     case FETCH_POSTS:
       // convert array of objects -> object of objects, key as id
@@ -59,9 +61,50 @@ function postsReducer(state = {}, action) {
         }
       };
     case CREATE_COMMENT:
-      return state[action.payload.data.parentId].comments.concat(
-        action.payload.data
+      tmpComment = _.mapKeys(
+        state[action.payload.data.parentId].comments,
+        'id'
       );
+      return {
+        ...state,
+        [action.payload.data.parentId]: {
+          ...state[action.payload.data.parentId],
+          comments: {
+            ...tmpComment,
+            [action.payload.data.id]: action.payload.data
+          }
+        }
+      };
+    case INCREMENT_COMMENT_LIKES:
+      tmpComment = _.mapKeys(state[action.postId].comments, 'id');
+      return {
+        ...state,
+        [action.postId]: {
+          ...state[action.postId],
+          comments: {
+            ...tmpComment,
+            [action.commentId]: {
+              ...tmpComment[action.commentId],
+              voteScore: tmpComment[action.commentId].voteScore + 1
+            }
+          }
+        }
+      };
+    case DECREMENT_COMMENT_LIKES:
+      tmpComment = _.mapKeys(state[action.postId].comments, 'id');
+      return {
+        ...state,
+        [action.postId]: {
+          ...state[action.postId],
+          comments: {
+            ...tmpComment,
+            [action.commentId]: {
+              ...tmpComment[action.commentId],
+              voteScore: tmpComment[action.commentId].voteScore - 1
+            }
+          }
+        }
+      };
     default:
       return state;
   }

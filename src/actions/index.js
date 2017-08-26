@@ -13,6 +13,8 @@ export const UPDATE_POST = 'update_post';
 export const FETCH_COMMENT = 'fetch_comment';
 export const DELETE_POST = 'delete_post';
 export const CREATE_COMMENT = 'create_comment';
+export const INCREMENT_COMMENT_LIKES = 'increment_comment_likes';
+export const DECREMENT_COMMENT_LIKES = 'decrement_comment_likes';
 
 const URL = 'http://localhost:5001/';
 
@@ -88,7 +90,7 @@ export const fetchPost = id => {
     payload: request
   };
 };
-
+//todo: change request -> payload: request
 export const updatePost = (id, values, callback) => {
   const request = axios({
     method: 'put',
@@ -141,5 +143,21 @@ export const createComment = values => {
   return {
     type: CREATE_COMMENT,
     payload: request
+  };
+};
+
+export const incrementCommentLikes = (postId, commentId) => {
+  return {
+    type: INCREMENT_COMMENT_LIKES,
+    postId,
+    commentId
+  };
+};
+
+export const decrementCommentLikes = (postId, commentId) => {
+  return {
+    type: DECREMENT_COMMENT_LIKES,
+    postId,
+    commentId
   };
 };

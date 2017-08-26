@@ -17,7 +17,7 @@ class PostDetailView extends Component {
     }
   }
 
-  onDeleteHandle = () => {
+  handleDelete = () => {
     const { id } = this.props.match.params;
     const { deletePost, history } = this.props;
     deletePost(id, () => history.push('/'));
@@ -73,7 +73,7 @@ class PostDetailView extends Component {
                   content="Delete"
                   icon="delete"
                   labelPosition="left"
-                  onClick={this.onDeleteHandle.bind(this)}
+                  onClick={this.handleDelete.bind(this)}
                 />
               </Item.Extra>
               <Comments id={post.id} />

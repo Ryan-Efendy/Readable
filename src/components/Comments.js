@@ -1,16 +1,33 @@
 import React, { Component } from 'react';
-import { Button, Comment, Form, Header, Icon } from 'semantic-ui-react';
+import {
+  Button,
+  Comment,
+  Form,
+  Header,
+  Icon,
+  Item,
+  Label
+} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
 import uuidv1 from 'uuid/v1';
-import { fetchComment, createComment } from '../actions';
+import _ from 'lodash';
+import {
+  fetchComment,
+  createComment,
+  incrementCommentLikes,
+  decrementCommentLikes
+} from '../actions';
 
 class Comments extends Component {
   constructor(props) {
     super(props);
     this.submit = this.submit.bind(this);
+    this.state = {
+      sortBy: 'voteScore'
+    };
   }
 
   componentDidMount() {
@@ -21,16 +38,17 @@ class Comments extends Component {
   }
 
   submit = values => {
-    const { createComment, id } = this.props;
+    const { createComment, id, reset } = this.props;
     values.id = uuidv1(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
     values.timestamp = Date.now();
     values.parentId = id;
-    createComment(values);
+    createComment(values).then(() => reset());
   };
 
   renderComments = () => {
-    const { comments } = this.props;
-    return comments.map(comment =>
+    const { comments, id } = this.props;
+    const { sortBy } = this.state;
+    return _.map(_.reverse(_.sortBy(comments, sortBy)), comment =>
       <Comment key={comment.id}>
         <Comment.Avatar src="https://source.unsplash.com/random/73x73" />
         <Comment.Content>
@@ -46,11 +64,24 @@ class Comments extends Component {
             {comment.body}
           </Comment.Text>
           <Comment.Actions>
-            <Comment.Action>
+            <Comment.Action
+              onClick={this.props.incrementCommentLikes.bind(
+                null,
+                id,
+                comment.id
+              )}
+            >
               <Icon name="thumbs up" />
             </Comment.Action>
             <Comment.Action>
-              <Icon name="thumbs down" />
+              <Icon
+                name="thumbs down"
+                onClick={this.props.decrementCommentLikes.bind(
+                  null,
+                  id,
+                  comment.id
+                )}
+              />
             </Comment.Action>
             <Comment.Action>
               {comment.voteScore}
@@ -120,6 +151,21 @@ class Comments extends Component {
           Comments
         </Header>
 
+        <Item.Extra>
+          <Label
+            icon="users"
+            as="a"
+            content="Most Popular"
+            onClick={() => this.setState({ sortBy: 'voteScore' })}
+          />
+          <Label
+            icon="time"
+            as="a"
+            content="Most Recent"
+            onClick={() => this.setState({ sortBy: 'timestamp' })}
+          />
+        </Item.Extra>
+
         {this.renderComments()}
 
         <Form reply onSubmit={handleSubmit(this.submit)}>
@@ -170,5 +216,13 @@ const mapStateToProps = (state, ownProps) => {
 
 export default reduxForm({
   form: 'commentForm', // need to be unique
+  // destroyOnUnmount: false,
   validate
-})(connect(mapStateToProps, { fetchComment, createComment })(Comments));
+})(
+  connect(mapStateToProps, {
+    fetchComment,
+    createComment,
+    incrementCommentLikes,
+    decrementCommentLikes
+  })(Comments)
+);
