@@ -11,7 +11,8 @@ import {
   CREATE_POST,
   FETCH_POST,
   LOAD,
-  FETCH_COMMENT
+  FETCH_COMMENT,
+  CREATE_COMMENT
 } from '../actions';
 
 function postsReducer(state = {}, action) {
@@ -57,6 +58,10 @@ function postsReducer(state = {}, action) {
           comments: action.payload.data
         }
       };
+    case CREATE_COMMENT:
+      return state[action.payload.data.parentId].comments.concat(
+        action.payload.data
+      );
     default:
       return state;
   }

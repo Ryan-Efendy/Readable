@@ -129,7 +129,7 @@ class Comments extends Component {
             component={this.renderTextArea}
           />
           <Field
-            name="owner"
+            name="author"
             type="text"
             label="Enter author"
             component={this.renderField}
@@ -156,8 +156,8 @@ function validate(values) {
   if (!values.body) {
     errors.body = 'Enter a comment';
   }
-  if (!values.owner) {
-    errors.owner = 'Enter a author';
+  if (!values.author) {
+    errors.author = 'Enter a author';
   }
   return errors;
 }

@@ -140,6 +140,6 @@ export const createComment = values => {
   });
   return {
     type: CREATE_COMMENT,
-    request
+    payload: request
   };
 };
