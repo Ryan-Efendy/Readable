@@ -38,7 +38,6 @@ class DefaultView extends Component {
   };
 
   handleSortClick = (e, { name }) => {
-    debugger;
     this.setState({ activeSort: name });
     //todo: which method if better/more efficient
     name === 'mostPopular'

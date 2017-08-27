@@ -91,7 +91,6 @@ class Posts extends Component {
 
   render() {
     const { posts } = this.props;
-    debugger;
     if (!posts || _.isEmpty(posts)) {
       return <div>Loading...</div>;
     }
