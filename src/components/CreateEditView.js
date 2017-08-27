@@ -30,7 +30,6 @@ class createEditForm extends Component {
 
   submit = values => {
     const { createPost, updatePost, match: { params: { id } } } = this.props;
-    debugger;
     if (this.state.isEditView) {
       let updateValues = {};
       updateValues.title = values.title;

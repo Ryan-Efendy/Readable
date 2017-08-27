@@ -12,7 +12,7 @@ import reducers from './reducers';
 import { Route } from 'react-router-dom';
 import DefaultView from './components/DefaultView';
 import CreateEditView from './components/CreateEditView';
-import CategoryView from './components/CategoryView';
+// import CategoryView from './components/CategoryView';
 import PostDetailView from './components/PostDetailView';
 import InitializeFromStateForm from './components/initializeFromStateForm';
 

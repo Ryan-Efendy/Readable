@@ -14,12 +14,14 @@ class Header extends Component {
   renderCategories = activeCategory => {
     if (!_.isEmpty(this.props.categories)) {
       return this.props.categories.map(category =>
-        <Menu.Item
-          name={category}
-          active={activeCategory === category}
-          onClick={this.props.onClick}
-          key={category}
-        />
+        <Link to={`/category/${category}`} key={category}>
+          <Menu.Item
+            name={category}
+            active={activeCategory === category}
+            onClick={this.props.onClick}
+            as="button"
+          />
+        </Link>
       );
     }
   };
@@ -27,13 +29,21 @@ class Header extends Component {
   render() {
     return (
       <Menu tabular inverted>
-        <Menu.Item header>Readable</Menu.Item>
-        <Menu.Item
-          name="All"
-          active={this.props.activeCategory === 'All'}
-          onClick={this.props.onClick}
-          key="All"
-        />
+        <Link to="/" key="Home">
+          <Menu.Item header as="button">
+            Readable
+          </Menu.Item>
+        </Link>
+
+        <Link to="/category/All" key="All">
+          <Menu.Item
+            name="All"
+            active={this.props.activeCategory === 'All'}
+            onClick={this.props.onClick}
+            as="button"
+          />
+        </Link>
+
         {this.renderCategories(this.props.activeCategory)}
         <Menu.Menu position="right">
           <Menu.Item>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Menu, Button, Feed, Icon, Grid } from 'semantic-ui-react';
+import { Button, Feed, Icon, Grid } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import moment from 'moment';
