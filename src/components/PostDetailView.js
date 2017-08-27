@@ -29,7 +29,6 @@ class PostDetailView extends Component {
   };
 
   render() {
-    debugger;
     const { post } = this.props;
     if (!post) {
       return <div />;

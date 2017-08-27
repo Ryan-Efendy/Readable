@@ -186,7 +186,6 @@ class Comments extends Component {
 
   //todo: if there's no comment still need to render comment box
   render() {
-    debugger;
     const { comments } = this.props;
     if (!comments) {
       return (

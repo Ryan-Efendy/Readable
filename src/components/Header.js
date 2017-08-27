@@ -26,7 +26,6 @@ class Header extends Component {
     }
   };
 
-  //todo: need to render based on /:category
   render() {
     const { category } = this.props;
     return (
