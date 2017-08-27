@@ -29,7 +29,7 @@ ReactDOM.render(
       <div>
         <Route exact path="/" component={DefaultView} />
         <Route path="/create" component={CreateEditView} />
-        <Route path="/category/:id" component={DefaultView} />
+        <Route path="/:category" component={DefaultView} />
         <Route path="/edit/:id" component={CreateEditView} />
         <Route path="/show/:id" component={PostDetailView} />
       </div>

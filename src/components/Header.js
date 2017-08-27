@@ -14,7 +14,7 @@ class Header extends Component {
   renderCategories = activeCategory => {
     if (!_.isEmpty(this.props.categories)) {
       return this.props.categories.map(category =>
-        <Link to={`/category/${category}`} key={category}>
+        <Link to={`/${category}`} key={category}>
           <Menu.Item
             name={category}
             active={activeCategory === category}
@@ -35,7 +35,7 @@ class Header extends Component {
           </Menu.Item>
         </Link>
 
-        <Link to="/category/All" key="All">
+        <Link to="/All" key="All">
           <Menu.Item
             name="All"
             active={this.props.activeCategory === 'All'}
