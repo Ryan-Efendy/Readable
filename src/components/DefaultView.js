@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import Header from './Header';
+import SideMenu from './SideMenu';
 import {
   fetchPosts,
   sortByDate,
@@ -118,20 +120,6 @@ class DefaultView extends Component {
     }
   };
 
-  //todo: should i cache categories since is also used in CreateEditView
-  renderCategories = activeCategory => {
-    if (!_.isEmpty(this.props.categories)) {
-      return this.props.categories.map(category =>
-        <Menu.Item
-          name={category}
-          active={activeCategory === category}
-          onClick={this.handleCategoryClick}
-          key={category}
-        />
-      );
-    }
-  };
-
   render() {
     const { activeCategory, activeSort } = this.state;
     const { posts } = this.props;
@@ -142,24 +130,10 @@ class DefaultView extends Component {
 
     return (
       <div>
-        <Menu tabular inverted>
-          <Menu.Item header>Readable</Menu.Item>
-          <Menu.Item
-            name="All"
-            active={activeCategory === 'All'}
-            onClick={this.handleCategoryClick}
-          />
-          {this.renderCategories(activeCategory)}
-          <Menu.Menu position="right">
-            <Menu.Item>
-              <Link to="/create">
-                <Button primary floated="right">
-                  Create Post
-                </Button>
-              </Link>
-            </Menu.Item>
-          </Menu.Menu>
-        </Menu>
+        <Header
+          onClick={this.handleCategoryClick}
+          activeCategory={activeCategory}
+        />
 
         <Grid className="very padded">
           <Grid.Column stretched width={12}>
@@ -168,21 +142,7 @@ class DefaultView extends Component {
             </Feed>
           </Grid.Column>
 
-          <Grid.Column width={4}>
-            <Menu text vertical>
-              <Menu.Item header>Sort By</Menu.Item>
-              <Menu.Item
-                name="mostPopular"
-                active={activeSort === 'mostPopular'}
-                onClick={this.handleSortClick}
-              />
-              <Menu.Item
-                name="MostRecent"
-                active={activeSort === 'mostRecent'}
-                onClick={this.handleSortClick}
-              />
-            </Menu>
-          </Grid.Column>
+          <SideMenu onClick={this.handleSortClick} activeSort={activeSort} />
         </Grid>
       </div>
     );
