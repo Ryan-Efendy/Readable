@@ -53,7 +53,6 @@ class Comments extends Component {
   renderComments = () => {
     const { comments, id } = this.props;
     const { sortBy } = this.state;
-    debugger;
     return _.map(_.reverse(_.sortBy(comments, sortBy)), comment => {
       if (!comment.deleted)
         return (
@@ -159,11 +158,42 @@ class Comments extends Component {
     );
   };
 
+  renderForm = () =>
+    <Form reply onSubmit={this.props.handleSubmit(this.submit)}>
+      <Field
+        name="body"
+        label="Enter comment"
+        component={this.renderTextArea}
+      />
+      <Field
+        name="author"
+        type="text"
+        label="Enter author"
+        component={this.renderField}
+      />
+
+      <Button
+        content="Add Comment"
+        labelPosition="left"
+        icon="add"
+        type="submit"
+        primary
+      />
+      <Link to="/">
+        <Button content="Back" icon="home" labelPosition="left" secondary />
+      </Link>
+    </Form>;
+
   //todo: if there's no comment still need to render comment box
   render() {
-    const { comments, handleSubmit } = this.props;
+    debugger;
+    const { comments } = this.props;
     if (!comments) {
-      return <div />;
+      return (
+        <div>
+          {this.renderForm()}
+        </div>
+      );
     }
     return (
       <Comment.Group>
@@ -188,30 +218,7 @@ class Comments extends Component {
 
         {this.renderComments()}
 
-        <Form reply onSubmit={handleSubmit(this.submit)}>
-          <Field
-            name="body"
-            label="Enter comment"
-            component={this.renderTextArea}
-          />
-          <Field
-            name="author"
-            type="text"
-            label="Enter author"
-            component={this.renderField}
-          />
-
-          <Button
-            content="Add Comment"
-            labelPosition="left"
-            icon="add"
-            type="submit"
-            primary
-          />
-          <Link to="/">
-            <Button content="Back" icon="home" labelPosition="left" secondary />
-          </Link>
-        </Form>
+        {this.renderForm()}
       </Comment.Group>
     );
   }

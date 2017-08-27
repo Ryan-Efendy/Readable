@@ -29,12 +29,11 @@ class PostDetailView extends Component {
   };
 
   render() {
+    debugger;
     const { post } = this.props;
-
     if (!post) {
       return <div />;
     }
-
     return (
       <Container text style={{ marginTop: '7em' }}>
         <Header as="h1">Show Post</Header>
