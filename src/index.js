@@ -9,7 +9,7 @@ import promise from 'redux-promise';
 import logger from 'redux-logger';
 import reducers from './reducers';
 
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import DefaultView from './components/DefaultView';
 import CreateEditView from './components/CreateEditView';
 // import CategoryView from './components/CategoryView';
@@ -26,13 +26,13 @@ ReactDOM.render(
     )}
   >
     <BrowserRouter>
-      <div>
+      <Switch>
         <Route exact path="/" component={DefaultView} />
-        <Route path="/create" component={CreateEditView} />
-        <Route path="/:category" component={DefaultView} />
-        <Route path="/edit/:id" component={CreateEditView} />
-        <Route path="/show/:id" component={PostDetailView} />
-      </div>
+        <Route exact path="/create" component={CreateEditView} />
+        <Route exact path="/edit/:id" component={CreateEditView} />
+        <Route exact path="/:category" component={DefaultView} />
+        <Route exact path="/:category/:id" component={PostDetailView} />
+      </Switch>
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')

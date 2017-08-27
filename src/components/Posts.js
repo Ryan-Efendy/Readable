@@ -26,11 +26,12 @@ class Posts extends Component {
   renderPosts = category => {
     if (!_.isEmpty(this.props.posts)) {
       let posts =
-        category !== 'All'
-          ? this.sortBy(
+        !category || category === 'all'
+          ? this.sortBy(this.props.posts)
+          : this.sortBy(
               _.filter(this.props.posts, post => post.category === category)
-            )
-          : this.sortBy(this.props.posts);
+            );
+
       return _.map(posts, post => {
         if (!post.deleted) {
           return (
@@ -60,7 +61,7 @@ class Posts extends Component {
                   <Feed.Like>
                     {post.voteScore}
                   </Feed.Like>
-                  <Link to={`/show/${post.id}`}>
+                  <Link to={`/${post.category}/${post.id}`}>
                     <Button
                       secondary
                       floated="right"

@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Feed, Icon, Grid } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
-import moment from 'moment';
-import { Link } from 'react-router-dom';
 import Header from './Header';
 import SideMenu from './SideMenu';
 import Posts from './Posts';
@@ -20,12 +17,10 @@ class DefaultView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeCategory: 'All',
       activeSort: 'mostPopular'
     };
-    this.handleCategoryClick = this.handleCategoryClick.bind(this);
+    // this.handleCategoryClick = this.handleCategoryClick.bind(this);
     this.handleSortClick = this.handleSortClick.bind(this);
-    this.sortBy = this.sortBy.bind(this);
   }
 
   componentDidMount() {
@@ -33,9 +28,9 @@ class DefaultView extends Component {
     this.props.fetchCategories();
   }
 
-  handleCategoryClick = (e, { name }) => {
-    this.setState({ activeCategory: name });
-  };
+  // handleCategoryClick = (e, { name }) => {
+  //   this.setState({ activeCategory: name });
+  // };
 
   handleSortClick = (e, { name }) => {
     this.setState({ activeSort: name });
@@ -48,82 +43,9 @@ class DefaultView extends Component {
     //   : _.reverse(_.sortBy(this.props.post, 'timestamp'));
   };
 
-  sortBy = posts => {
-    return this.state.activeSort === 'mostPopular'
-      ? _.reverse(_.sortBy(posts, 'voteScore'))
-      : _.reverse(_.sortBy(posts, 'timestamp'));
-  };
-
-  //todo: add user profile?
-  renderPosts = category => {
-    if (!_.isEmpty(this.props.posts)) {
-      let posts =
-        category !== 'All'
-          ? this.sortBy(
-              _.filter(this.props.posts, post => post.category === category)
-            )
-          : this.sortBy(this.props.posts);
-      return _.map(posts, post => {
-        if (!post.deleted) {
-          return (
-            <Feed.Event key={post.id}>
-              <Feed.Label style={{ width: '7.5em' }}>
-                <img src="https://source.unsplash.com/random/73x73" alt="" />
-              </Feed.Label>
-              <Feed.Content>
-                <Feed.Summary>
-                  <Feed.User>{post.author}</Feed.User> in <a>{post.category}</a>
-                  <Feed.Date>{moment(post.timestamp).fromNow()}</Feed.Date>
-                </Feed.Summary>
-                <Feed.Extra text>
-                  {post.title}
-                </Feed.Extra>
-                <Feed.Meta>
-                  <Feed.Like
-                    onClick={this.props.incrementLikes.bind(null, post.id)}
-                  >
-                    <Icon name="thumbs up" />
-                  </Feed.Like>
-                  <Feed.Like
-                    onClick={this.props.decrementLikes.bind(null, post.id)}
-                  >
-                    <Icon name="thumbs down" />
-                  </Feed.Like>
-                  <Feed.Like>
-                    {post.voteScore}
-                  </Feed.Like>
-                  <Link to={`/show/${post.id}`}>
-                    <Button
-                      secondary
-                      floated="right"
-                      size="mini"
-                      content="Details"
-                      icon="comments"
-                      style={{ marginLeft: '1em' }}
-                    />
-                  </Link>
-                  <Link to={`/edit/${post.id}`}>
-                    <Button
-                      primary
-                      floated="right"
-                      size="mini"
-                      content="Edit"
-                      icon="write"
-                      style={{ marginLeft: '10em' }}
-                    />
-                  </Link>
-                </Feed.Meta>
-              </Feed.Content>
-            </Feed.Event>
-          );
-        }
-      });
-    }
-  };
-
   render() {
-    const { activeCategory, activeSort } = this.state;
-    const { posts } = this.props;
+    const { activeSort } = this.state;
+    const { posts, match: { params: { category } } } = this.props;
 
     if (!posts) {
       return <div>Loading...</div>;
@@ -131,14 +53,11 @@ class DefaultView extends Component {
 
     return (
       <div>
-        <Header
-          onClick={this.handleCategoryClick}
-          activeCategory={activeCategory}
-        />
+        <Header category={category} />
 
         <Grid className="very padded">
           <Grid.Column stretched width={12}>
-            <Posts activeCategory={activeCategory} activeSort={activeSort} />
+            <Posts activeCategory={category} activeSort={activeSort} />
           </Grid.Column>
 
           <SideMenu onClick={this.handleSortClick} activeSort={activeSort} />
