@@ -199,13 +199,14 @@ export const decrementCommentLikes = (postId, commentId) => {
   };
 };
 
-export const deleteComment = id => {
-  const request = axios.delete(`${URL}comments/${id}`, {
+export const deleteComment = (postId, commentId) => {
+  const request = axios.delete(`${URL}comments/${commentId}`, {
     headers: { Authorization: 'whatever-you-want' }
   });
   return {
     type: DELETE_COMMENT,
-    payload: id
+    postId,
+    commentId
   };
 };
 

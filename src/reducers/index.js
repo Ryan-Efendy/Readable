@@ -130,15 +130,16 @@ function postsReducer(state = {}, action) {
         }
       };
     case DELETE_COMMENT:
-      tmpComment = _.mapKeys(state[Object.keys(state)].comments, 'id');
+      // Array.isArray(state)
+      tmpComment = _.mapKeys(state[action.postId].comments, 'id');
       return {
         ...state,
-        [state[Object.keys(state)].id]: {
-          ...state[Object.keys(state)],
+        [state[action.postId].id]: {
+          ...state[action.postId],
           comments: {
             ...tmpComment,
-            [action.payload]: {
-              ...tmpComment[action.payload],
+            [action.commentId]: {
+              ...tmpComment[action.commentId],
               deleted: true
             }
           }

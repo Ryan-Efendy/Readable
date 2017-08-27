@@ -13,7 +13,6 @@ class Header extends Component {
   //todo: should i cache categories since is also used in CreateEditView
   renderCategories = activeCategory => {
     if (!_.isEmpty(this.props.categories)) {
-      debugger;
       return this.props.categories.map(category =>
         <Link to={`/${category}`} key={category}>
           <Menu.Item
@@ -30,7 +29,6 @@ class Header extends Component {
   //todo: need to render based on /:category
   render() {
     const { category } = this.props;
-    debugger;
     return (
       <Menu tabular inverted>
         <Link to="/" key="Home">

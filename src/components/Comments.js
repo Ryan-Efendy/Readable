@@ -27,7 +27,7 @@ class Comments extends Component {
   constructor(props) {
     super(props);
     this.submit = this.submit.bind(this);
-    this.state = { modalOpen: false };
+    this.state = { modalOpen: false, sortBy: 'voteScore' };
   }
 
   componentDidMount() {
@@ -45,14 +45,15 @@ class Comments extends Component {
     createComment(values).then(() => reset());
   };
 
-  handleDelete = id => {
+  handleDelete = (postId, commentId) => {
     const { deleteComment } = this.props;
-    deleteComment(id);
+    deleteComment(postId, commentId);
   };
 
   renderComments = () => {
     const { comments, id } = this.props;
     const { sortBy } = this.state;
+    debugger;
     return _.map(_.reverse(_.sortBy(comments, sortBy)), comment => {
       if (!comment.deleted)
         return (
@@ -100,7 +101,7 @@ class Comments extends Component {
                     content="Delete"
                     icon="delete"
                     size="mini"
-                    onClick={this.handleDelete.bind(this, comment.id)}
+                    onClick={this.handleDelete.bind(this, id, comment.id)}
                   />
                 </div>
               </Comment.Actions>
@@ -158,6 +159,7 @@ class Comments extends Component {
     );
   };
 
+  //todo: if there's no comment still need to render comment box
   render() {
     const { comments, handleSubmit } = this.props;
     if (!comments) {
