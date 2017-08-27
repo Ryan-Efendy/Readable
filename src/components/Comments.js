@@ -27,9 +27,7 @@ class Comments extends Component {
   constructor(props) {
     super(props);
     this.submit = this.submit.bind(this);
-    this.state = {
-      sortBy: 'voteScore'
-    };
+    this.state = { modalOpen: false };
   }
 
   componentDidMount() {
@@ -53,7 +51,7 @@ class Comments extends Component {
   };
 
   renderComments = () => {
-    const { comments, id, handleDelete } = this.props;
+    const { comments, id } = this.props;
     const { sortBy } = this.state;
     return _.map(_.reverse(_.sortBy(comments, sortBy)), comment => {
       if (!comment.deleted)

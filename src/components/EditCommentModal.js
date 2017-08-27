@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Image, Modal, Form } from 'semantic-ui-react';
+import { Button, Modal } from 'semantic-ui-react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { fetchComments, updateComment } from '../actions';
@@ -23,8 +23,7 @@ class EditCommentModal extends Component {
     let updateValues = {};
     updateValues.author = values.author;
     updateValues.body = values.body;
-    updateComment(commentId, updateValues);
-    this.handleClose();
+    updateComment(commentId, updateValues, () => this.handleClose());
   };
 
   render() {

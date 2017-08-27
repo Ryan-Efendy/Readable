@@ -1,12 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Item,
-  Container,
-  Header,
-  Icon,
-  Button,
-  Label
-} from 'semantic-ui-react';
+import { Item, Container, Header, Icon, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
