@@ -15,6 +15,8 @@ export const DELETE_POST = 'delete_post';
 export const CREATE_COMMENT = 'create_comment';
 export const INCREMENT_COMMENT_LIKES = 'increment_comment_likes';
 export const DECREMENT_COMMENT_LIKES = 'decrement_comment_likes';
+export const DELETE_COMMENT = 'delete_comment';
+export const UPDATE_COMMENT = 'update_comment';
 
 const URL = 'http://localhost:5001/';
 
@@ -55,13 +57,30 @@ export const sortByPopularity = posts => {
 };
 
 export const incrementLikes = id => {
+  const request = axios({
+    method: 'post',
+    url: `${URL}posts/${id}`,
+    data: {
+      option: 'upVote'
+    },
+    headers: { Authorization: 'whatever-you-want' }
+  });
   return {
     type: INCREMENT_LIKES,
-    id
+    id,
+    payload: request
   };
 };
 
 export const decrementLikes = id => {
+  const request = axios({
+    method: 'post',
+    url: `${URL}posts/${id}`,
+    data: {
+      option: 'downVote'
+    },
+    headers: { Authorization: 'whatever-you-want' }
+  });
   return {
     type: DECREMENT_LIKES,
     id
@@ -111,7 +130,7 @@ export const load = data => {
   };
 };
 
-export const fetchComment = id => {
+export const fetchComments = id => {
   const request = axios.get(`${URL}posts/${id}/comments`, {
     headers: { Authorization: 'whatever-you-want' }
   });
@@ -147,17 +166,58 @@ export const createComment = values => {
 };
 
 export const incrementCommentLikes = (postId, commentId) => {
+  const request = axios({
+    method: 'post',
+    url: `${URL}comments/${commentId}`,
+    data: {
+      option: 'upVote'
+    },
+    headers: { Authorization: 'whatever-you-want' }
+  });
   return {
     type: INCREMENT_COMMENT_LIKES,
     postId,
-    commentId
+    commentId,
+    payload: request
   };
 };
 
 export const decrementCommentLikes = (postId, commentId) => {
+  const request = axios({
+    method: 'post',
+    url: `${URL}comments/${commentId}`,
+    data: {
+      option: 'downVote'
+    },
+    headers: { Authorization: 'whatever-you-want' }
+  });
   return {
     type: DECREMENT_COMMENT_LIKES,
     postId,
-    commentId
+    commentId,
+    payload: request
+  };
+};
+
+export const deleteComment = id => {
+  const request = axios.delete(`${URL}comments/${id}`, {
+    headers: { Authorization: 'whatever-you-want' }
+  });
+  return {
+    type: DELETE_COMMENT,
+    payload: id
+  };
+};
+
+export const updateComment = (id, values, callback) => {
+  const request = axios({
+    method: 'put',
+    url: `${URL}comments/${id}`,
+    data: values,
+    headers: { Authorization: 'whatever-you-want' }
+  });
+  return {
+    type: UPDATE_COMMENT,
+    payload: request
   };
 };

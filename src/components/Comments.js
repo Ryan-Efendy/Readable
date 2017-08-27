@@ -15,11 +15,13 @@ import { Field, reduxForm } from 'redux-form';
 import uuidv1 from 'uuid/v1';
 import _ from 'lodash';
 import {
-  fetchComment,
+  fetchComments,
   createComment,
   incrementCommentLikes,
-  decrementCommentLikes
+  decrementCommentLikes,
+  deleteComment
 } from '../actions';
+import EditCommentModal from './EditCommentModal';
 
 class Comments extends Component {
   constructor(props) {
@@ -33,7 +35,7 @@ class Comments extends Component {
   componentDidMount() {
     const { id } = this.props;
     if (id) {
-      this.props.fetchComment(id);
+      this.props.fetchComments(id);
     }
   }
 
@@ -45,51 +47,69 @@ class Comments extends Component {
     createComment(values).then(() => reset());
   };
 
+  handleDelete = id => {
+    const { deleteComment } = this.props;
+    deleteComment(id);
+  };
+
   renderComments = () => {
-    const { comments, id } = this.props;
+    const { comments, id, handleDelete } = this.props;
     const { sortBy } = this.state;
-    return _.map(_.reverse(_.sortBy(comments, sortBy)), comment =>
-      <Comment key={comment.id}>
-        <Comment.Avatar src="https://source.unsplash.com/random/73x73" />
-        <Comment.Content>
-          <Comment.Author as="a">
-            {comment.author}
-          </Comment.Author>
-          <Comment.Metadata>
-            <div>
-              {moment(comment.timestamp).fromNow()}
-            </div>
-          </Comment.Metadata>
-          <Comment.Text>
-            {comment.body}
-          </Comment.Text>
-          <Comment.Actions>
-            <Comment.Action
-              onClick={this.props.incrementCommentLikes.bind(
-                null,
-                id,
-                comment.id
-              )}
-            >
-              <Icon name="thumbs up" />
-            </Comment.Action>
-            <Comment.Action>
-              <Icon
-                name="thumbs down"
-                onClick={this.props.decrementCommentLikes.bind(
-                  null,
-                  id,
-                  comment.id
-                )}
-              />
-            </Comment.Action>
-            <Comment.Action>
-              {comment.voteScore}
-            </Comment.Action>
-          </Comment.Actions>
-        </Comment.Content>
-      </Comment>
-    );
+    return _.map(_.reverse(_.sortBy(comments, sortBy)), comment => {
+      if (!comment.deleted)
+        return (
+          <Comment key={comment.id}>
+            <Comment.Avatar src="https://source.unsplash.com/random/73x73" />
+            <Comment.Content>
+              <Comment.Author as="a">
+                {comment.author}
+              </Comment.Author>
+              <Comment.Metadata>
+                <div>
+                  {moment(comment.timestamp).fromNow()}
+                </div>
+              </Comment.Metadata>
+              <Comment.Text>
+                {comment.body}
+              </Comment.Text>
+              <Comment.Actions>
+                <Comment.Action
+                  onClick={this.props.incrementCommentLikes.bind(
+                    null,
+                    id,
+                    comment.id
+                  )}
+                >
+                  <Icon name="thumbs up" />
+                </Comment.Action>
+                <Comment.Action>
+                  <Icon
+                    name="thumbs down"
+                    onClick={this.props.decrementCommentLikes.bind(
+                      null,
+                      id,
+                      comment.id
+                    )}
+                  />
+                </Comment.Action>
+                <Comment.Action>
+                  {comment.voteScore}
+                </Comment.Action>
+                <div style={{ marginLeft: 125 }}>
+                  <EditCommentModal postId={id} commentId={comment.id} />
+                  <Button
+                    negative
+                    content="Delete"
+                    icon="delete"
+                    size="mini"
+                    onClick={this.handleDelete.bind(this, comment.id)}
+                  />
+                </div>
+              </Comment.Actions>
+            </Comment.Content>
+          </Comment>
+        );
+    });
   };
 
   renderField = ({ input, label, type, meta: { touched, error } }) => {
@@ -220,9 +240,10 @@ export default reduxForm({
   validate
 })(
   connect(mapStateToProps, {
-    fetchComment,
+    fetchComments,
     createComment,
     incrementCommentLikes,
-    decrementCommentLikes
+    decrementCommentLikes,
+    deleteComment
   })(Comments)
 );

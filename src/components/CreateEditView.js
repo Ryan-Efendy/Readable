@@ -20,15 +20,17 @@ class createEditForm extends Component {
     // cache: don't eagerly refresh posts check if already fetch posts
     if (!this.props.post) {
       this.props.fetchCategories();
-      if (this.props.match.params.id) {
-        this.setState({ isEditView: true });
-        this.props.fetchPost(this.props.match.params.id);
-      }
+    }
+
+    if (this.props.match.params.id) {
+      this.setState({ isEditView: true });
+      this.props.fetchPost(this.props.match.params.id);
     }
   }
 
   submit = values => {
     const { createPost, updatePost, match: { params: { id } } } = this.props;
+    debugger;
     if (this.state.isEditView) {
       let updateValues = {};
       updateValues.title = values.title;
@@ -106,7 +108,7 @@ class createEditForm extends Component {
           <Header as="h1">
             {isEditView ? `Edit Post` : `Create Post`}
           </Header>
-          <Form onSubmit={handleSubmit(this.submit)}>
+          <Form>
             <Field
               name="title"
               type="text"
@@ -141,7 +143,7 @@ class createEditForm extends Component {
               </div>
             </div>
             <div style={{ marginTop: 20 }}>
-              <Button type="submit">
+              <Button onClick={handleSubmit(this.submit)}>
                 {isEditView ? `Update` : `Submit`}
               </Button>
               <Button onClick={() => history.goBack()}>Cancel</Button>
@@ -174,10 +176,11 @@ const validate = values => {
 };
 
 const mapStateToProps = ({ posts, categories }, ownProps) => {
+  const post = posts[ownProps.match.params.id];
   return {
-    post: posts[ownProps.match.params.id],
+    post,
     categories,
-    initialValues: posts[ownProps.match.params.id]
+    initialValues: post
   };
 };
 

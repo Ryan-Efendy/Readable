@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
-import { Item, Container, Header, Icon, Button } from 'semantic-ui-react';
+import {
+  Item,
+  Container,
+  Header,
+  Icon,
+  Button,
+  Label
+} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { fetchPost, deletePost } from '../actions';
+import {
+  fetchPost,
+  deletePost,
+  incrementLikes,
+  decrementLikes
+} from '../actions';
 import Comments from './Comments';
 
 class PostDetailView extends Component {
@@ -45,7 +57,7 @@ class PostDetailView extends Component {
                 {post.title}
               </Item.Header>
               <Item.Meta>
-                <span>
+                <span className="ui small header">
                   {post.author}
                 </span>
                 <span>
@@ -56,8 +68,25 @@ class PostDetailView extends Component {
                 {post.body}
               </Item.Description>
               <Item.Extra>
-                <Icon name="like" />
-                {post.voteScore}
+                <div>
+                  <Button
+                    attached="left"
+                    onClick={this.props.incrementLikes.bind(null, post.id)}
+                  >
+                    <Icon name="like outline" />
+                    like
+                  </Button>
+                  <Button
+                    attached="right"
+                    onClick={this.props.decrementLikes.bind(null, post.id)}
+                  >
+                    <Icon name="dislike outline" />
+                    dislike
+                  </Button>
+                  <Button attached="right" disabled>
+                    {post.voteScore}
+                  </Button>
+                </div>
               </Item.Extra>
               <Item.Extra>
                 <Link to={`/edit/${post.id}`}>
@@ -91,6 +120,9 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps, { fetchPost, deletePost })(
-  PostDetailView
-);
+export default connect(mapStateToProps, {
+  fetchPost,
+  deletePost,
+  incrementLikes,
+  decrementLikes
+})(PostDetailView);
