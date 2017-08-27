@@ -6,6 +6,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import Header from './Header';
 import SideMenu from './SideMenu';
+import Posts from './Posts';
 import {
   fetchPosts,
   sortByDate,
@@ -37,14 +38,15 @@ class DefaultView extends Component {
   };
 
   handleSortClick = (e, { name }) => {
+    debugger;
     this.setState({ activeSort: name });
     //todo: which method if better/more efficient
-    // name === 'mostPopular'
-    //   ? this.props.sortByPopularity(this.props.posts)
-    //   : this.props.sortByDate(this.props.posts);
     name === 'mostPopular'
-      ? _.reverse(_.sortBy(this.props.post, 'voteScore'))
-      : _.reverse(_.sortBy(this.props.post, 'timestamp'));
+      ? this.props.sortByPopularity(this.props.posts)
+      : this.props.sortByDate(this.props.posts);
+    // name === 'mostPopular'
+    //   ? _.reverse(_.sortBy(this.props.post, 'voteScore'))
+    //   : _.reverse(_.sortBy(this.props.post, 'timestamp'));
   };
 
   sortBy = posts => {
@@ -137,9 +139,7 @@ class DefaultView extends Component {
 
         <Grid className="very padded">
           <Grid.Column stretched width={12}>
-            <Feed>
-              {this.renderPosts(this.state.activeCategory)}
-            </Feed>
+            <Posts activeCategory={activeCategory} activeSort={activeSort} />
           </Grid.Column>
 
           <SideMenu onClick={this.handleSortClick} activeSort={activeSort} />
