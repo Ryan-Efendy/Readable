@@ -47,7 +47,13 @@ npm start
    - Store
 ```
 
-# Miscellaneous
+## Miscellaneous
   - ESlint rules are implemented
   - Prettier as code formatter
   - *This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).*
+
+## Contributing
+This is an assignment for Udacity React ND, pull requests are welcome
+
+## Licences
+Do not copy this project if you are a student of udacity in this class. And you can feel free to use it for any other usage.

@@ -184,7 +184,6 @@ class Comments extends Component {
       </Link>
     </Form>;
 
-  //todo: if there's no comment still need to render comment box
   render() {
     const { comments } = this.props;
     if (!comments) {
@@ -233,13 +232,33 @@ function validate(values) {
   }
   return errors;
 }
+/*
+* Suggestion: 
+There is a cleaner way to add singular actions to your container, with ES6 techniques.
 
+For singular actions, you can do the following to completely avoid utilizing the mapDispatchToProps function:
+
+export default connect(mapStateToProps, {action1, action2})(Component);
+This adds the action creators to your this.props object without the need to utilize the mapStateToProps method :muscle:
+*/
 const mapStateToProps = (state, ownProps) => {
   return {
     comments: state.posts[ownProps.id].comments
   };
 };
 
+/*
+Suggestion:
+If you want to pass multiple action creators into your container, you can do so by first importing your actions utilizing the following import method:
+
+Import * as actions from ‘../actions/action1’;
+The above selects ALL your actions within a specific action creator module, and adds them to this.props
+
+To connect this with your container, you just write the following:
+
+export default connect(mapStateToProps, actions)(Component);
+This adds all the action creators within the actions module, to your container
+*/
 export default reduxForm({
   form: 'commentForm', // need to be unique
   // destroyOnUnmount: false,

@@ -20,6 +20,11 @@ export const UPDATE_COMMENT = 'update_comment';
 
 const URL = 'http://localhost:5001/';
 
+/**
+ * As with your reducers, it's considered best practice to split action creators into logical component modules, to improve your file structure and code readability
+ * You may find this article helpful to help you achieve this https://marmelab.com/blog/2015/12/17/react-directory-structure.html
+ */
+
 export const fetchPosts = () => {
   const request = axios.get(`${URL}posts`, {
     headers: { Authorization: 'whatever-you-want' }
