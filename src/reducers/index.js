@@ -1,8 +1,7 @@
 import { combineReducers } from 'redux';
-import _ from 'lodash';
 import { reducer as formReducer } from 'redux-form';
-import PostsReducer from '../reducers/PostsReducer'
-import CategoriesReducer from '../reducers/CategoriesReducer'
+import PostsReducer from '../reducers/PostsReducer';
+import CategoriesReducer from '../reducers/CategoriesReducer';
 
 const rootReducer = combineReducers({
   posts: PostsReducer,

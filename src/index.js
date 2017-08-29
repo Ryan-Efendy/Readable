@@ -12,7 +12,6 @@ import reducers from './reducers';
 import { Route, Switch } from 'react-router-dom';
 import DefaultView from './components/DefaultView';
 import CreateEditView from './components/CreateEditView';
-// import CategoryView from './components/CategoryView';
 import PostDetailView from './components/PostDetailView';
 
 const createStoreWithMiddleware = applyMiddleware(promise, logger)(createStore);
@@ -28,10 +27,10 @@ ReactDOM.render(
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={DefaultView} />
-        <Route exact path="/create" component={CreateEditView} />
-        <Route exact path="/edit/:id" component={CreateEditView} />
+        <Route path="/create" component={CreateEditView} />
+        <Route path="/edit/:id" component={CreateEditView} />
         <Route exact path="/:category" component={DefaultView} />
-        <Route exact path="/:category/:id" component={PostDetailView} />
+        <Route path="/:category/:id" component={PostDetailView} />
       </Switch>
     </BrowserRouter>
   </Provider>,

@@ -10,6 +10,7 @@ import {
   decrementLikes
 } from '../actions';
 import Comments from './Comments';
+import NotFound from './NotFound';
 
 class PostDetailView extends Component {
   componentDidMount() {
@@ -30,9 +31,7 @@ class PostDetailView extends Component {
 
   render() {
     const { post } = this.props;
-    if (!post) {
-      return <div />;
-    }
+    if (!post) return <NotFound />;
     return (
       <Container text style={{ marginTop: '7em' }}>
         <Header as="h1">Show Post</Header>

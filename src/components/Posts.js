@@ -22,7 +22,6 @@ class Posts extends Component {
       : _.reverse(_.sortBy(posts, 'timestamp'));
   };
 
-  //todo: add user profile?
   renderPosts = category => {
     if (!_.isEmpty(this.props.posts)) {
       let posts =
@@ -31,7 +30,15 @@ class Posts extends Component {
           : this.sortBy(
               _.filter(this.props.posts, post => post.category === category)
             );
-
+      // if (posts.length === 0 || _.isEmpty(posts)) {
+      //   return (
+      //     <div>
+      //       <h3>
+      //         No post availabel for ${category} category
+      //       </h3>
+      //     </div>
+      //   );
+      // }
       return _.map(posts, post => {
         if (!post.deleted) {
           return (
