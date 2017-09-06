@@ -1,5 +1,5 @@
 ## Readable
-![screen shot 2017-09-05 at 10 00 19 pm](https://user-images.githubusercontent.com/12979345/30095506-f2bbfd5a-9287-11e7-8531-459b815e8e07.png)
+![screen shot 2017-09-05 at 10 26 42 pm](https://user-images.githubusercontent.com/12979345/30095755-69ed0bd4-9289-11e7-960f-aa4c68eee2a6.png)
 Readable is a content and comment web app. Users will be able to post content to predefined categories, comment on their posts and other users' posts, and vote on posts and comments. Users will also be able to edit and delete posts and comments.
 
 This app will talk to a backend server using documented API endpoints to manage storing, reading, updating, and deleting data from the application.
