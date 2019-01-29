@@ -16,15 +16,14 @@ class Posts extends Component {
     this.props.fetchPosts();
   }
 
-  sortBy = posts => {
-    return this.props.activeSort === 'mostPopular'
+  sortBy = posts =>
+    this.props.activeSort === 'mostPopular'
       ? _.reverse(_.sortBy(posts, 'voteScore'))
       : _.reverse(_.sortBy(posts, 'timestamp'));
-  };
 
   renderPosts = category => {
     if (!_.isEmpty(this.props.posts)) {
-      let posts =
+      const posts =
         !category || category === 'all'
           ? this.sortBy(this.props.posts)
           : this.sortBy(
@@ -51,9 +50,7 @@ class Posts extends Component {
                   <Feed.User>{post.author}</Feed.User> in <a>{post.category}</a>
                   <Feed.Date>{moment(post.timestamp).fromNow()}</Feed.Date>
                 </Feed.Summary>
-                <Feed.Extra text>
-                  {post.title}
-                </Feed.Extra>
+                <Feed.Extra text>{post.title}</Feed.Extra>
                 <Feed.Meta>
                   <Feed.Like
                     onClick={this.props.incrementLikes.bind(null, post.id)}
@@ -65,9 +62,7 @@ class Posts extends Component {
                   >
                     <Icon name="thumbs down" />
                   </Feed.Like>
-                  <Feed.Like>
-                    {post.voteScore}
-                  </Feed.Like>
+                  <Feed.Like>{post.voteScore}</Feed.Like>
                   <Link to={`/${post.category}/${post.id}`}>
                     <Button
                       secondary
@@ -103,26 +98,21 @@ class Posts extends Component {
       return <div>Loading...</div>;
     }
 
-    return (
-      <Feed>
-        {this.renderPosts(this.props.activeCategory)}
-      </Feed>
-    );
+    return <Feed>{this.renderPosts(this.props.activeCategory)}</Feed>;
   }
 }
 
-const mapStateToProps = ({ posts }) => {
-  return {
-    posts
-  };
-};
+const mapStateToProps = ({ posts }) => ({
+  posts
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchPosts: () => dispatch(fetchPosts()),
-    incrementLikes: id => dispatch(incrementLikes(id)),
-    decrementLikes: id => dispatch(decrementLikes(id))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  fetchPosts: () => dispatch(fetchPosts()),
+  incrementLikes: id => dispatch(incrementLikes(id)),
+  decrementLikes: id => dispatch(decrementLikes(id))
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Posts);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Posts);

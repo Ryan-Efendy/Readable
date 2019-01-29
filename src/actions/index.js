@@ -47,19 +47,15 @@ export const fetchCategories = () => {
   };
 };
 
-export const sortByDate = posts => {
-  return {
-    type: SORT_BY_DATE,
-    posts
-  };
-};
+export const sortByDate = posts => ({
+  type: SORT_BY_DATE,
+  posts
+});
 
-export const sortByPopularity = posts => {
-  return {
-    type: SORT_BY_POPULARITY,
-    posts
-  };
-};
+export const sortByPopularity = posts => ({
+  type: SORT_BY_POPULARITY,
+  posts
+});
 
 export const incrementLikes = id => {
   const request = axios({
@@ -78,7 +74,7 @@ export const incrementLikes = id => {
 };
 
 export const decrementLikes = id => {
-  const request = axios({
+  axios({
     method: 'post',
     url: `${URL}posts/${id}`,
     data: {
@@ -114,7 +110,8 @@ export const fetchPost = id => {
     payload: request
   };
 };
-//todo: change request -> payload: request
+
+// todo: change request -> payload: request
 export const updatePost = (id, values, callback) => {
   const request = axios({
     method: 'put',
@@ -128,12 +125,10 @@ export const updatePost = (id, values, callback) => {
   };
 };
 
-export const load = data => {
-  return {
-    type: LOAD,
-    data
-  };
-};
+export const load = data => ({
+  type: LOAD,
+  data
+});
 
 export const fetchComments = id => {
   const request = axios.get(`${URL}posts/${id}/comments`, {
@@ -146,7 +141,7 @@ export const fetchComments = id => {
 };
 
 export const deletePost = (id, callback) => {
-  const request = axios
+  axios
     .delete(`${URL}posts/${id}`, {
       headers: { Authorization: 'whatever-you-want' }
     })
@@ -205,7 +200,7 @@ export const decrementCommentLikes = (postId, commentId) => {
 };
 
 export const deleteComment = (postId, commentId) => {
-  const request = axios.delete(`${URL}comments/${commentId}`, {
+  axios.delete(`${URL}comments/${commentId}`, {
     headers: { Authorization: 'whatever-you-want' }
   });
   return {
@@ -215,7 +210,7 @@ export const deleteComment = (postId, commentId) => {
   };
 };
 
-export const updateComment = (id, values, callback) => {
+export const updateComment = (id, values) => {
   const request = axios({
     method: 'put',
     url: `${URL}comments/${id}`,

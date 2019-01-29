@@ -2,16 +2,13 @@ import React, { Component } from 'react';
 import { Button, Modal } from 'semantic-ui-react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { fetchComments, updateComment } from '../actions';
 import _ from 'lodash';
+import { fetchComments, updateComment } from '../actions';
 
 class EditCommentModal extends Component {
   constructor(props) {
     super(props);
     this.submit = this.submit.bind(this);
-    this.state = {
-      sortBy: 'voteScore'
-    };
   }
 
   handleOpen = () => this.setState({ modalOpen: true });
@@ -20,7 +17,7 @@ class EditCommentModal extends Component {
 
   submit = values => {
     const { updateComment, commentId } = this.props;
-    let updateValues = {};
+    const updateValues = {};
     updateValues.author = values.author;
     updateValues.body = values.body;
     updateComment(commentId, updateValues, () => this.handleClose());
@@ -28,6 +25,7 @@ class EditCommentModal extends Component {
 
   render() {
     const { handleSubmit, pristine, reset, submitting } = this.props;
+    const { modalOpen } = this.state;
     return (
       <Modal
         trigger={
@@ -41,7 +39,7 @@ class EditCommentModal extends Component {
           />
         }
         size="mini"
-        open={this.state.modalOpen}
+        open={modalOpen}
         onClose={this.handleClose}
       >
         <Modal.Header>Edit Comment</Modal.Header>
@@ -88,7 +86,7 @@ class EditCommentModal extends Component {
   }
 }
 
-const validate = values => {
+const validate = () => {
   const errors = {};
 
   return errors;

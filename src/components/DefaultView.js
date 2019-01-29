@@ -34,7 +34,7 @@ class DefaultView extends Component {
 
   handleSortClick = (e, { name }) => {
     this.setState({ activeSort: name });
-    //todo: which method if better/more efficient
+    // todo: which method if better/more efficient
     name === 'mostPopular'
       ? this.props.sortByPopularity(this.props.posts)
       : this.props.sortByDate(this.props.posts);
@@ -45,7 +45,12 @@ class DefaultView extends Component {
 
   render() {
     const { activeSort } = this.state;
-    const { posts, match: { params: { category } } } = this.props;
+    const {
+      posts,
+      match: {
+        params: { category }
+      }
+    } = this.props;
 
     if (!posts) {
       return <div>Loading...</div>;
@@ -67,22 +72,21 @@ class DefaultView extends Component {
   }
 }
 
-const mapStateToProps = ({ posts, categories }) => {
-  return {
-    posts,
-    categories
-  };
-};
+const mapStateToProps = ({ posts, categories }) => ({
+  posts,
+  categories
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchPosts: () => dispatch(fetchPosts()),
-    fetchCategories: () => dispatch(fetchCategories()),
-    sortByDate: posts => dispatch(sortByDate(posts)),
-    sortByPopularity: posts => dispatch(sortByPopularity(posts)),
-    incrementLikes: id => dispatch(incrementLikes(id)),
-    decrementLikes: id => dispatch(decrementLikes(id))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  fetchPosts: () => dispatch(fetchPosts()),
+  fetchCategories: () => dispatch(fetchCategories()),
+  sortByDate: posts => dispatch(sortByDate(posts)),
+  sortByPopularity: posts => dispatch(sortByPopularity(posts)),
+  incrementLikes: id => dispatch(incrementLikes(id)),
+  decrementLikes: id => dispatch(decrementLikes(id))
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(DefaultView);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DefaultView);

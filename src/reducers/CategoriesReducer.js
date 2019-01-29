@@ -11,7 +11,7 @@ export default function categoriesReducer(state = {}, action) {
       ) {
         return state;
       }
-      return action.payload.data['categories'].map(category => category.name);
+      return action.payload.data.categories.map(category => category.name);
     default:
       return state;
   }

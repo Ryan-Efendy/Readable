@@ -29,9 +29,15 @@ class createEditForm extends Component {
   }
 
   submit = values => {
-    const { createPost, updatePost, match: { params: { id } } } = this.props;
+    const {
+      createPost,
+      updatePost,
+      match: {
+        params: { id }
+      }
+    } = this.props;
     if (this.state.isEditView) {
-      let updateValues = {};
+      const updateValues = {};
       updateValues.title = values.title;
       updateValues.body = values.body;
       updatePost(id, updateValues, () => this.props.history.push('/'));
@@ -80,77 +86,67 @@ class createEditForm extends Component {
     return (
       <div>
         {userMessage}
-        <div className="text-danger">
-          {touched ? error : ''}
-        </div>
+        <div className="text-danger">{touched ? error : ''}</div>
       </div>
     );
   };
 
-  renderOptions = categories => {
-    return categories.map(category =>
+  renderOptions = categories =>
+    categories.map(category => (
       <option key={category} value={category}>
         {category}
       </option>
-    );
-  };
+    ));
 
   render() {
     const { handleSubmit, categories, history } = this.props;
     const { isEditView } = this.state;
-    //todo: is there a better/cleaner way to do this
+    // todo: is there a better/cleaner way to do this
     if (_.isEmpty(categories)) {
       return <div />;
-    } else {
-      return (
-        <Container text style={{ marginTop: '7em' }}>
-          <Header as="h1">
-            {isEditView ? `Edit Post` : `Create Post`}
-          </Header>
-          <Form>
-            <Field
-              name="title"
-              type="text"
-              label="Title"
-              component={this.renderField}
-            />
-            <Field
-              name="body"
-              type="text"
-              label="Body"
-              component={this.renderField}
-            />
-            <Field
-              name="author"
-              type="text"
-              label="Author"
-              component={this.renderField}
-              disabled={isEditView ? true : false}
-            />
-            {/*todo: need to add validation */}
-            <div>
-              <label>Category</label>
-              <div>
-                <Field
-                  name="category"
-                  component="select"
-                  disabled={isEditView ? true : false}
-                >
-                  <option value="">Select a category</option>
-                  {this.renderOptions(categories)}
-                </Field>
-              </div>
-            </div>
-            <div style={{ marginTop: 20 }}>
-              <Button onClick={handleSubmit(this.submit)}>
-                {isEditView ? `Update` : `Submit`}
-              </Button>
-              <Button onClick={() => history.goBack()}>Cancel</Button>
-            </div>
-          </Form>
-        </Container>
-      );
     }
+    return (
+      <Container text style={{ marginTop: '7em' }}>
+        <Header as="h1">{isEditView ? `Edit Post` : `Create Post`}</Header>
+        <Form>
+          <Field
+            name="title"
+            type="text"
+            label="Title"
+            component={this.renderField}
+          />
+          <Field
+            name="body"
+            type="text"
+            label="Body"
+            component={this.renderField}
+          />
+          <Field
+            name="author"
+            type="text"
+            label="Author"
+            component={this.renderField}
+            disabled={!!isEditView}
+          />
+          {/* todo: need to add validation */}
+          <div>
+            <label>Category</label>
+            <div>
+              <Field name="category" component="select" disabled={!!isEditView}>
+                <option value="">Select a category</option>
+                {this.renderOptions(categories)}
+              </Field>
+            </div>
+          </div>
+          <div style={{ marginTop: 20 }}>
+            <Button onClick={handleSubmit(this.submit)}>
+              {isEditView ? `Update` : `Submit`}
+            </Button>
+            <Button onClick={() => history.goBack()}>Cancel</Button>
+          </div>
+        </Form>
+      </Container>
+    );
   }
 }
 

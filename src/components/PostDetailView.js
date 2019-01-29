@@ -43,20 +43,12 @@ class PostDetailView extends Component {
             />
 
             <Item.Content>
-              <Item.Header as="a">
-                {post.title}
-              </Item.Header>
+              <Item.Header as="a">{post.title}</Item.Header>
               <Item.Meta>
-                <span className="ui small header">
-                  {post.author}
-                </span>
-                <span>
-                  {moment(post.timestamp).fromNow()}
-                </span>
+                <span className="ui small header">{post.author}</span>
+                <span>{moment(post.timestamp).fromNow()}</span>
               </Item.Meta>
-              <Item.Description>
-                {post.body}
-              </Item.Description>
+              <Item.Description>{post.body}</Item.Description>
               <Item.Extra>
                 <div>
                   <Button
@@ -104,15 +96,16 @@ class PostDetailView extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    post: state.posts[ownProps.match.params.id]
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  post: state.posts[ownProps.match.params.id]
+});
 
-export default connect(mapStateToProps, {
-  fetchPost,
-  deletePost,
-  incrementLikes,
-  decrementLikes
-})(PostDetailView);
+export default connect(
+  mapStateToProps,
+  {
+    fetchPost,
+    deletePost,
+    incrementLikes,
+    decrementLikes
+  }
+)(PostDetailView);

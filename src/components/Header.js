@@ -10,10 +10,10 @@ class Header extends Component {
     this.props.fetchCategories();
   }
 
-  //todo: should i cache categories since is also used in CreateEditView
+  // todo: should i cache categories since is also used in CreateEditView
   renderCategories = activeCategory => {
     if (!_.isEmpty(this.props.categories)) {
-      return this.props.categories.map(category =>
+      return this.props.categories.map(category => (
         <Link to={`/${category}`} key={category}>
           <Menu.Item
             name={category}
@@ -22,7 +22,7 @@ class Header extends Component {
             as="button"
           />
         </Link>
-      );
+      ));
     }
   };
 
@@ -58,16 +58,15 @@ class Header extends Component {
   }
 }
 
-const mapStateToProps = ({ categories }) => {
-  return {
-    categories
-  };
-};
+const mapStateToProps = ({ categories }) => ({
+  categories
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    fetchCategories: () => dispatch(fetchCategories())
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  fetchCategories: () => dispatch(fetchCategories())
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Header);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Menu } from 'semantic-ui-react';
 
-const SideMenu = props =>
+const SideMenu = props => (
   <Grid.Column width={4}>
     <Menu text vertical>
       <Menu.Item header>Sort By</Menu.Item>
@@ -16,6 +16,7 @@ const SideMenu = props =>
         onClick={props.onClick}
       />
     </Menu>
-  </Grid.Column>;
+  </Grid.Column>
+);
 
 export default SideMenu;

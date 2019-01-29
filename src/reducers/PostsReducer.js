@@ -17,7 +17,8 @@ import {
 } from '../actions';
 
 export default function postsReducer(state = {}, action) {
-  let tmpState, tmpComment;
+  let tmpState;
+  let tmpComment;
   switch (action.type) {
     case FETCH_POSTS:
       if (
@@ -34,8 +35,8 @@ export default function postsReducer(state = {}, action) {
     case SORT_BY_POPULARITY:
       return _.reverse(_.sortBy(action.posts, 'voteScore'));
     case INCREMENT_LIKES:
-      //todo: see if there's a better way to do this...
-      //todo: need to check if success/200 before incrementing?
+      // todo: see if there's a better way to do this...
+      // todo: need to check if success/200 before incrementing?
       tmpState = _.mapKeys(state, 'id');
       return {
         ...tmpState,

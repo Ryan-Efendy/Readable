@@ -27,7 +27,7 @@ class Comments extends Component {
   constructor(props) {
     super(props);
     this.submit = this.submit.bind(this);
-    this.state = { modalOpen: false, sortBy: 'voteScore' };
+    this.state = { sortBy: 'voteScore' };
   }
 
   componentDidMount() {
@@ -59,17 +59,11 @@ class Comments extends Component {
           <Comment key={comment.id}>
             <Comment.Avatar src="https://source.unsplash.com/random/73x73" />
             <Comment.Content>
-              <Comment.Author as="a">
-                {comment.author}
-              </Comment.Author>
+              <Comment.Author as="a">{comment.author}</Comment.Author>
               <Comment.Metadata>
-                <div>
-                  {moment(comment.timestamp).fromNow()}
-                </div>
+                <div>{moment(comment.timestamp).fromNow()}</div>
               </Comment.Metadata>
-              <Comment.Text>
-                {comment.body}
-              </Comment.Text>
+              <Comment.Text>{comment.body}</Comment.Text>
               <Comment.Actions>
                 <Comment.Action
                   onClick={this.props.incrementCommentLikes.bind(
@@ -90,9 +84,7 @@ class Comments extends Component {
                     )}
                   />
                 </Comment.Action>
-                <Comment.Action>
-                  {comment.voteScore}
-                </Comment.Action>
+                <Comment.Action>{comment.voteScore}</Comment.Action>
                 <div style={{ marginLeft: 125 }}>
                   <EditCommentModal postId={id} commentId={comment.id} />
                   <Button
@@ -130,9 +122,7 @@ class Comments extends Component {
     return (
       <div>
         {userMessage}
-        <div className="text-danger">
-          {touched ? error : ''}
-        </div>
+        <div className="text-danger">{touched ? error : ''}</div>
       </div>
     );
   };
@@ -151,14 +141,12 @@ class Comments extends Component {
     return (
       <div>
         {userMessage}
-        <div className="text-danger">
-          {touched ? error : ''}
-        </div>
+        <div className="text-danger">{touched ? error : ''}</div>
       </div>
     );
   };
 
-  renderForm = () =>
+  renderForm = () => (
     <Form reply onSubmit={this.props.handleSubmit(this.submit)}>
       <Field
         name="body"
@@ -182,16 +170,13 @@ class Comments extends Component {
       <Link to="/">
         <Button content="Back" icon="home" labelPosition="left" secondary />
       </Link>
-    </Form>;
+    </Form>
+  );
 
   render() {
     const { comments } = this.props;
     if (!comments) {
-      return (
-        <div>
-          {this.renderForm()}
-        </div>
-      );
+      return <div>{this.renderForm()}</div>;
     }
     return (
       <Comment.Group>
@@ -233,7 +218,7 @@ function validate(values) {
   return errors;
 }
 /*
-* Suggestion: 
+* Suggestion:
 There is a cleaner way to add singular actions to your container, with ES6 techniques.
 
 For singular actions, you can do the following to completely avoid utilizing the mapDispatchToProps function:
@@ -241,11 +226,9 @@ For singular actions, you can do the following to completely avoid utilizing the
 export default connect(mapStateToProps, {action1, action2})(Component);
 This adds the action creators to your this.props object without the need to utilize the mapStateToProps method :muscle:
 */
-const mapStateToProps = (state, ownProps) => {
-  return {
-    comments: state.posts[ownProps.id].comments
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  comments: state.posts[ownProps.id].comments
+});
 
 /*
 Suggestion:
@@ -264,11 +247,14 @@ export default reduxForm({
   // destroyOnUnmount: false,
   validate
 })(
-  connect(mapStateToProps, {
-    fetchComments,
-    createComment,
-    incrementCommentLikes,
-    decrementCommentLikes,
-    deleteComment
-  })(Comments)
+  connect(
+    mapStateToProps,
+    {
+      fetchComments,
+      createComment,
+      incrementCommentLikes,
+      decrementCommentLikes,
+      deleteComment
+    }
+  )(Comments)
 );
