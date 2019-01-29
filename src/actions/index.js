@@ -18,7 +18,7 @@ export const DECREMENT_COMMENT_LIKES = 'decrement_comment_likes';
 export const DELETE_COMMENT = 'delete_comment';
 export const UPDATE_COMMENT = 'update_comment';
 
-const URL = 'http://localhost:5001/';
+const URL = 'http://localhost:3001/';
 
 /**
  * As with your reducers, it's considered best practice to split action creators into logical component modules, to improve your file structure and code readability
