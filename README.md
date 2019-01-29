@@ -30,7 +30,7 @@ node server.js # running on localhost:3001 🍰✨
 
 ```sh
 cd ~/
-git clone https://github.com/Ryan-Efendy/Readable.git
+git clone https://github.com/Ryan-Efendy/react-redux-readable.git
 cd readable
 yarn
 yarn start # visit localhost:3000 🍰✨
