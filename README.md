@@ -19,7 +19,6 @@ Alternatively, you can use `npm` instead of `yarn`or vice versa
 ### Grab start the backend server
 
 ```sh
-cd ~/
 git clone https://github.com/udacity/reactnd-project-readable-starter.git
 cd reactnd-project-readable-starter
 npm install
@@ -29,7 +28,6 @@ node server.js # running on localhost:3001 🍰✨
 ### Install and deploy client side
 
 ```sh
-cd ~/
 git clone https://github.com/Ryan-Efendy/react-redux-readable.git
 cd readable
 yarn
